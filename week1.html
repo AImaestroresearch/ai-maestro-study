@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1회차 — 내 업무용 Skill 개선 · 규정 Q&A 봇 최신화</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+  :root {
+    --navy: #003A70; --gold: #B98E2F; --lightgold: #FDF6E7;
+    --ink: #0B0B0B; --gray: #52514E; --sky: #EEF3FB; --line: #D8E0EE; --bg: #F6F7F9;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "Pretendard", "Malgun Gothic", "맑은 고딕", sans-serif;
+    color: var(--ink); background: var(--bg); line-height: 1.7;
+    padding: 24px 16px 60px;
+  }
+  .wrap { max-width: 860px; margin: 0 auto; }
+  a.back { color: var(--gray); font-size: .85rem; text-decoration: none; }
+  a.back:hover { color: var(--navy); }
+
+  header {
+    background: var(--navy); color: #fff; border-radius: 14px;
+    padding: 34px 38px 30px; margin: 10px 0 22px;
+    border-bottom: 5px solid var(--gold);
+  }
+  header .tag {
+    display: inline-block; border: 1px solid var(--gold); color: #FFD88A;
+    border-radius: 20px; font-size: .8rem; padding: 3px 14px; margin-bottom: 14px;
+  }
+  header h1 { font-size: 1.65rem; line-height: 1.35; font-weight: 800; }
+  header .sub { margin-top: 12px; font-size: .93rem; color: #CFD8E4; }
+
+  .lead {
+    background: var(--lightgold); border: 1px solid #ECD9AB; border-left: 5px solid var(--gold);
+    border-radius: 10px; padding: 18px 24px; margin-bottom: 24px; font-size: 1rem;
+  }
+  .lead b { color: var(--navy); }
+
+  section {
+    background: #fff; border: 1px solid var(--line); border-radius: 14px;
+    padding: 28px 32px; margin-bottom: 20px;
+  }
+  h2 {
+    font-size: 1.15rem; color: var(--navy); font-weight: 800;
+    padding-bottom: 10px; border-bottom: 2px solid var(--sky); margin-bottom: 18px;
+  }
+  h2 .no {
+    display: inline-block; background: var(--navy); color: #FFD88A; font-size: .85rem;
+    border-radius: 6px; padding: 1px 10px; margin-right: 9px; vertical-align: 2px;
+  }
+  p { margin-bottom: 12px; }
+  ul { padding-left: 20px; margin-bottom: 10px; }
+  li { margin-bottom: 8px; }
+  .muted { color: var(--gray); font-size: .88rem; }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 14px; margin-top: 6px; }
+  .card {
+    border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; background: #fff;
+  }
+  .card .step {
+    display: inline-block; background: var(--sky); color: var(--navy); font-weight: 800;
+    font-size: .8rem; border-radius: 6px; padding: 2px 10px; margin-bottom: 8px;
+  }
+  .card h3 { font-size: 1rem; color: var(--navy); margin-bottom: 8px; }
+  .card p { font-size: .9rem; margin-bottom: 0; color: var(--gray); }
+  .card b { color: var(--ink); }
+
+  .scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: .92rem; margin: 8px 0; }
+  th, td { border: 1px solid var(--line); padding: 9px 14px; text-align: left; vertical-align: top; }
+  th { background: var(--navy); color: #fff; font-weight: 700; white-space: nowrap; }
+  td.dim { color: var(--gray); background: var(--bg); }
+  td.hl { background: var(--sky); }
+
+  footer { text-align: center; color: var(--gray); font-size: .83rem; margin-top: 26px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<a class="back" href="index.html">← 자율스터디 제출물 목록</a>
+
+<header>
+  <span class="tag">AI 마에스트로 자율스터디 · 1회차 결과물 (마감 8. 28.)</span>
+  <h1>내 업무용 Skill 개선<br>— 규정 Q&amp;A 봇 최신화</h1>
+  <div class="sub">부산대학교 연구진흥과 · 2026. 8. 24.</div>
+</header>
+
+<div class="lead">
+  <b>한 줄 요약:</b> 부서에서 운영 중인 <b>규정 Q&amp;A 봇</b>(Google Gemini Notebook 기반, 무료·브라우저)을
+  8월에 전면 최신화했습니다 — <b>지속가능한 계정 체계로 재구축</b>하고, <b>학습 소스를 현행 규정 27종으로 교체</b>했으며,
+  <b>FAQ 스트레스 테스트 10문항 전원 통과</b>로 검증하고, <b>오답 신고 체계</b>까지 갖췄습니다.
+</div>
+
+<section>
+  <h2><span class="no">1</span>이 봇이 하는 일</h2>
+  <p>연구비 집행·출장·회의비 등 <b>규정이 궁금할 때 채팅으로 물어보면, 근거 규정(출처)까지 달아서 답하는 봇</b>입니다.
+  부서 규정·지침·사례집 PDF를 학습시켜 만들었고, 별도 설치 없이 브라우저에서 씁니다.</p>
+  <p class="muted">규정 안내라는 반복 업무를 AI에게 맡기되, 근거(출처)를 반드시 함께 제시하게 해서 사람이 검증할 수 있게 한 것이 핵심입니다.</p>
+</section>
+
+<section>
+  <h2><span class="no">2</span>이번에 개선한 4가지</h2>
+  <div class="cards">
+    <div class="card">
+      <span class="step">① 지속가능 재구축 · 8/10</span>
+      <h3>개인 의존 → 부서 공용 체계</h3>
+      <p>개인 계정에 있던 노트북을 <b>부서 공용 계정 기반으로 재구축</b>.
+      "진짜 자산은 자료 마스터 폴더, 노트북은 언제든 재구축 가능" 전략을 실증 —
+      담당자가 바뀌어도 봇이 유지됩니다.</p>
+    </div>
+    <div class="card">
+      <span class="step">② 학습 소스 현행화 · 8/13</span>
+      <h3>옛 규정 격리, 현행본 27종으로</h3>
+      <p>2016~2019년판 <b>구본 3종을 격리</b>하고 최신 개정판 4종을 추가해 <b>소스 27종</b>으로 확충.
+      금액 기준이 바뀐 규정(청탁금지법 가액 등)은 <b>'현행 요약' 소스로 못박아</b> 옛 수치 인용을 차단했습니다.</p>
+    </div>
+    <div class="card">
+      <span class="step">③ 품질 검증 · 8/10</span>
+      <h3>FAQ 스트레스 테스트 10/10 통과</h3>
+      <p>식사 한도·경조사비·출장 여비·학생인건비 등 <b>금액·한도 중심 10문항</b>을 그대로 입력해
+      ①옛 수치 인용 ②환각(소스에 없는 답) ③규정 간 맥락 혼동을 점검 — <b>전 문항 통과</b>.</p>
+    </div>
+    <div class="card">
+      <span class="step">④ 오답 대비 체계 · 8/11</span>
+      <h3>"봇도 실수한다" 전제의 안전장치</h3>
+      <p>답이 애매하면 담당자에게 확인하도록 안내하고, <b>문의·오답 신고 폼 + 자동 알림</b>을 연결.
+      규정 개정 시 반영 절차는 <b>자료 최신화 체크리스트</b>로 문서화했습니다.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="no">3</span>Before / After</h2>
+  <div class="scroll">
+  <table>
+    <tr><th style="width:22%">구분</th><th style="width:39%">Before</th><th>After</th></tr>
+    <tr><td>운영 체계</td><td class="dim">개인 계정 의존 — 담당자 부재 시 중단 위험</td><td class="hl">부서 공용 체계 + 재구축 절차 문서화</td></tr>
+    <tr><td>학습 자료</td><td class="dim">2016~2019년판 혼재 — 옛 금액 인용 위험</td><td class="hl">현행본 27종 + 현행 수치 요약 소스</td></tr>
+    <tr><td>신뢰성</td><td class="dim">검증 없이 사용 — 답을 그대로 믿어야 함</td><td class="hl">10문항 스트레스 테스트 통과 + 출처 확인 습관화</td></tr>
+    <tr><td>오답 대응</td><td class="dim">없음</td><td class="hl">신고 폼 → 담당자 자동 알림 → 소스 교정</td></tr>
+  </table>
+  </div>
+</section>
+
+<section>
+  <h2><span class="no">4</span>왜 이것이 'Skill 개선'인가</h2>
+  <p>AI 봇의 답 품질은 결국 <b>어떤 자료를 학습시키고, 어떻게 검증하고, 틀렸을 때 어떻게 고치느냐</b>로 결정됩니다.
+  이번 최신화는 봇 자체를 새로 만든 것이 아니라, 그 <b>운영 매뉴얼(Skill)을 업그레이드</b>한 것입니다 —
+  소스 관리 규칙, 검증 문항, 오답 처리 절차가 모두 문서로 남아 누구든 이어받을 수 있습니다.</p>
+  <p class="muted"><b>다음 계획:</b> 주제별(연구비·여비·BK21) 노트북 분리 검토, 규정 개정 모니터링과 연계한 정기 최신화.</p>
+</section>
+
+<footer>
+  AI 마에스트로 자율스터디 1회차 제출물 · 부산대학교 연구진흥과 · 2026. 8.<br>
+  ※ 본 페이지는 공개 규정·비식별 정보만 담고 있습니다.
+</footer>
+
+</div>
+</body>
+</html>
