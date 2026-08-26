@@ -225,7 +225,7 @@ footer{margin-top:28px;font-size:12px;color:var(--muted)}
   ];
   const LS_KEY = 'apru-ues-2026-survey';
   // 구글 Apps Script 웹앱 URL (배포 후 여기에 붙여넣기). 비어 있으면 브라우저 저장으로 동작.
-  const API_URL = '';
+  const API_URL = 'https://script.google.com/macros/s/AKfycby6IRdG03xZhkK3_Q2zk1z9SfJOrMC2cfzDR896NrMyhmfhGC8HX0_CRp90JX7PhELC/exec';
 
   let state = JSON.parse(document.getElementById('survey-state').textContent || '{"responses":{}}');
   let artifact = null, mode = 'pending', readOnly = false;
