@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2회차 스터디 안내 — 엑셀 대시보드, 아주 쉽게</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+  :root {
+    --navy: #003A70; --gold: #B98E2F; --lightgold: #FDF6E7;
+    --ink: #0B0B0B; --gray: #52514E; --sky: #EEF3FB; --line: #D8E0EE; --bg: #F6F7F9;
+    --red: #C0392B;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "Pretendard", "Malgun Gothic", "맑은 고딕", sans-serif;
+    color: var(--ink); background: var(--bg); line-height: 1.75;
+    padding: 24px 16px 60px;
+  }
+  .wrap { max-width: 860px; margin: 0 auto; }
+
+  header {
+    background: var(--navy); color: #fff; border-radius: 14px;
+    padding: 34px 38px 30px; margin: 10px 0 22px;
+    border-bottom: 5px solid var(--gold);
+  }
+  header .tag {
+    display: inline-block; border: 1px solid var(--gold); color: #FFD88A;
+    border-radius: 20px; font-size: .8rem; padding: 3px 14px; margin-bottom: 14px;
+  }
+  header h1 { font-size: 1.6rem; line-height: 1.35; font-weight: 800; }
+  header .sub { margin-top: 12px; font-size: .93rem; color: #CFD8E4; }
+
+  .lead {
+    background: var(--lightgold); border: 1px solid #ECD9AB; border-left: 5px solid var(--gold);
+    border-radius: 10px; padding: 18px 24px; margin-bottom: 24px; font-size: 1rem;
+  }
+  .lead b { color: var(--navy); }
+
+  section {
+    background: #fff; border: 1px solid var(--line); border-radius: 14px;
+    padding: 28px 32px; margin-bottom: 20px;
+  }
+  h2 {
+    font-size: 1.15rem; color: var(--navy); font-weight: 800;
+    padding-bottom: 10px; border-bottom: 2px solid var(--sky); margin-bottom: 18px;
+  }
+  h2 .no {
+    display: inline-block; background: var(--navy); color: #FFD88A; font-size: .85rem;
+    border-radius: 6px; padding: 1px 10px; margin-right: 9px; vertical-align: 2px;
+  }
+  p { margin-bottom: 12px; }
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 8px; }
+  .muted { color: var(--gray); font-size: .88rem; }
+  b { color: var(--navy); }
+
+  .talk {
+    background: var(--sky); border-radius: 10px; padding: 14px 18px;
+    margin: 10px 0 14px; font-size: .95rem;
+  }
+  .talk .who { font-weight: 800; color: var(--navy); margin-right: 6px; }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-top: 6px; }
+  .card { border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; background: #fff; }
+  .card .step {
+    display: inline-block; background: var(--sky); color: var(--navy); font-weight: 800;
+    font-size: .8rem; border-radius: 6px; padding: 2px 10px; margin-bottom: 8px;
+  }
+  .card h3 { font-size: 1rem; color: var(--navy); margin-bottom: 8px; }
+  .card p { font-size: .9rem; margin-bottom: 0; color: var(--gray); }
+  .card b { color: var(--ink); }
+
+  .scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: .92rem; margin: 8px 0; }
+  th, td { border: 1px solid var(--line); padding: 9px 14px; text-align: left; vertical-align: top; }
+  th { background: var(--navy); color: #fff; font-weight: 700; white-space: nowrap; }
+  td.dim { color: var(--gray); background: var(--bg); }
+
+  code, .formula {
+    font-family: Consolas, "Courier New", monospace;
+    background: var(--bg); border: 1px solid var(--line);
+    border-radius: 6px; padding: 1px 7px; font-size: .88em; color: var(--red);
+    white-space: nowrap;
+  }
+  .bigformula {
+    display: block; white-space: normal; font-size: 1rem; padding: 12px 16px;
+    margin: 8px 0 12px; color: var(--navy); font-weight: 700;
+  }
+  img.shot { max-width: 100%; border: 1px solid var(--line); border-radius: 10px; }
+
+  .faq dt { font-weight: 800; color: var(--navy); margin-top: 14px; }
+  .faq dd { margin: 4px 0 0 0; color: var(--gray); }
+
+  footer { text-align: center; color: var(--gray); font-size: .83rem; margin-top: 26px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<a href="index.html" style="color:var(--gray); font-size:.85rem; text-decoration:none;">&larr; 자율스터디 제출물 목록</a>
+
+<header>
+  <span class="tag">AI 마에스트로 자율스터디 · 2회차 안내문</span>
+  <h1>엑셀 대시보드, 아주 쉽게<br>— PC 없이도 오늘 다 이해할 수 있어요</h1>
+  <div class="sub">2026. 8. 31.(월) 오전 11시 · 부산대학교 연구진흥과</div>
+</header>
+
+<div class="lead">
+  <b>스터디는 여기서, 실습은 각자의 자리에서!</b> 스터디 시간에는 컴퓨터를 켜지 않아도 되고,
+  수식을 외울 필요도 없습니다. 발표 화면을 같이 보고, 이야기 몇 마디 나누면 끝!
+  실습은 나중에 자리에서 해보시고, <b>모르는 게 나오면 질문 주세요 — 직접 가서 도와드립니다.</b>
+  이 안내문은 <b>중학생도 이해할 수 있는 수준</b>으로 적었으니, 스터디에 못 오신 분은 이것만 읽으셔도 충분합니다.
+</div>
+
+<section>
+  <h2><span class="no">1</span>오늘 배우는 것 — 딱 한 문장</h2>
+  <p style="font-size:1.05rem;">
+    <b>"매일 자동으로 쌓이는 공고 데이터 407건을, 사람 손 없이 저절로 갱신되는 '한 화면(대시보드)'으로 만들었다"</b>
+    — 이게 오늘 이야기의 전부입니다.
+  </p>
+  <p class="muted">우리 부서에는 매일 오전 10시, 정부 연구공고 사이트(IRIS)를 대신 확인해서 메일로 알려주는
+  '공고봇'이 이미 돌아가고 있어요(PC를 꺼도 구글 서버에서 알아서 돕니다). 봇이 확인한 공고는
+  구글 시트에 한 줄씩 차곡차곡 기록됩니다. 오늘은 그 기록을 <b>읽기 좋게 차린 상차림</b>을 구경하는 날입니다.</p>
+</section>
+
+<section>
+  <h2><span class="no">2</span>대시보드가 뭔가요? — 자동차 계기판이에요</h2>
+  <p>운전할 때 계기판을 보면 <b>속도, 남은 연료, 경고등</b>을 한눈에 알 수 있죠.
+  연료가 얼마나 남았는지 알려고 연료통 뚜껑을 열어보는 사람은 없습니다. <b>바늘이 알아서 움직이니까요.</b></p>
+  <div class="scroll">
+  <table>
+    <tr><th>자동차 계기판</th><th>우리 부서 대시보드</th></tr>
+    <tr><td class="dim">지금 속도는?</td><td>지금 <b>접수 중인 공고</b>는 몇 건? → 17건</td></tr>
+    <tr><td class="dim">연료는 얼마나?</td><td><b>이번 주 새 공고</b>는 몇 건? → 0건</td></tr>
+    <tr><td class="dim">경고등이 켜졌나?</td><td><b>7일 안에 마감</b>되는 공고는? → 8건 (빨갛게 표시)</td></tr>
+  </table>
+  </div>
+  <p>실물은 이렇게 생겼습니다 — 숫자 4개(맨 위), 그래프 3개(가운데), 급한 공고 목록(아래):</p>
+  <img class="shot" src="img/week2-dashboard.jpg" alt="연구공고봇 대시보드 화면">
+  <p class="muted" style="margin-top:8px;">재미있는 점: 이 화면을 만들자마자 "이번 주 새 공고 0건"이라는 게 눈에 확 들어왔어요.
+  매일 오는 메일만 볼 때는 몰랐던 사실이죠. <b>한 화면에 모아 놓으면 이상한 점이 저절로 보입니다.</b> 이게 대시보드의 힘이에요.</p>
+</section>
+
+<section>
+  <h2><span class="no">3</span>대시보드 사용법 — 열면 끝, 누르면 원문</h2>
+  <ol>
+    <li><b>시트를 연다 — 그게 전부.</b> 「연구공고봇」 시트를 열면 첫 화면이 대시보드입니다.
+    갱신 버튼은 없습니다. 열 때마다 이미 최신이에요(수식이 알아서).</li>
+    <li><b>위의 숫자 4개를 읽는다.</b> 누적 · 이번 주 신규 · 접수 중 · 7일 내 마감.
+    빨간 숫자가 보이면 "급한 게 있다"는 뜻입니다.</li>
+    <li><b>급한 공고는 「열기↗」를 누른다.</b> 아래 마감임박 목록은 급한 순서(D-day순)로 정렬돼 있고,
+    열기↗를 누르면 IRIS 원문으로 바로 이동합니다.</li>
+    <li><b>실수해도 괜찮다.</b> 보기만 하면 되고, 잘못 눌러 지워져도 '다시 만들기 버튼' 1번이면 복원됩니다.</li>
+  </ol>
+  <p class="muted">즐겨찾기에 넣어두고, 아침에 메일 대신 이 화면 한 번 — 그게 사용법의 전부입니다.</p>
+</section>
+
+<section>
+  <h2><span class="no">4</span>비법은 딱 3가지 — 수식이 다 합니다</h2>
+  <p>"코딩을 배워야 하나요?" 아니요. 시트에 쓰는 <b>수식 3가지</b>가 전부이고,
+  셋 다 우리가 매일 하는 말과 똑같습니다.</p>
+
+  <div class="cards">
+    <div class="card">
+      <span class="step">비법 ①</span>
+      <h3>세어 줘 — COUNTIF</h3>
+      <p>출석부에서 <b>"안경 쓴 사람만 세 봐"</b> 하는 것과 같아요.<br><br>
+      시트에게는 이렇게 말합니다:<br>"접수 중인 공고만 세 줘" → <b>17</b></p>
+    </div>
+    <div class="card">
+      <span class="step">비법 ②</span>
+      <h3>골라서 줄 세워 줘 — QUERY</h3>
+      <p>선생님이 <b>"이번 주 생일인 사람만 나와서 생일 빠른 순으로 서 봐"</b> 하는 것과 같아요.<br><br>
+      "마감이 14일 안 남은 공고만, 급한 순서로 보여 줘" → 마감임박 목록 완성</p>
+    </div>
+    <div class="card">
+      <span class="step">비법 ③</span>
+      <h3>빼기 — D-day</h3>
+      <p>컴퓨터에게 날짜는 사실 <b>숫자</b>예요. 그래서 뺄셈이 됩니다.<br><br>
+      <b>마감일 − 오늘 = 남은 날수.</b><br>
+      3 이하면 자동으로 빨간색! (조건부 서식)</p>
+    </div>
+  </div>
+
+  <p style="margin-top:16px;">그리고 만들 때 지킨 <b>약속 3가지</b>:</p>
+  <ol>
+    <li><b>원본은 절대 안 건드린다</b> — 봇의 기록은 그대로 두고, 새 시트 위에서만 계산했어요. (원본이 다치면 큰일!)</li>
+    <li><b>숫자를 손으로 적지 않는다</b> — 전부 수식이라, 봇이 새 데이터를 쌓으면 화면이 저절로 바뀝니다. 갱신 담당자가 필요 없어요.</li>
+    <li><b>지워져도 다시 만들 수 있게</b> — '다시 만들기 버튼'(함수 1개)을 준비해서, 실수로 지워도 1번 실행이면 복원됩니다.</li>
+  </ol>
+</section>
+
+<section>
+  <h2><span class="no">5</span>PC가 없어도 참여하는 방법 3가지</h2>
+  <p>스터디 시간에 모두가 PC를 쓸 수는 없죠. 그래서 오늘은 이렇게 합니다:</p>
+  <div class="cards">
+    <div class="card">
+      <span class="step">방법 1 · 눈</span>
+      <h3>발표 화면 함께 보기</h3>
+      <p>대시보드 실물과 만드는 과정을 화면으로 보여드립니다. <b>보는 것 자체가 오늘의 실습</b>이에요.</p>
+    </div>
+    <div class="card">
+      <span class="step">방법 2 · 폰</span>
+      <h3>스마트폰으로 구경 (선택)</h3>
+      <p>구글 시트는 폰에서도 열려요. 잘못 눌러도 안 망가집니다(보기 전용).<br>
+      <span style="font-size:.82em;">※ 시트 링크는 부서 내부(단톡방)로만 공유합니다 — 이 공개 페이지에는 싣지 않습니다.</span></p>
+    </div>
+    <div class="card">
+      <span class="step">방법 3 · 입</span>
+      <h3>말로 하는 미니 활동</h3>
+      <p>마지막 5분, 한 사람씩 이야기해요:<br><b>"내 업무에서 매번 세거나 찾아보는 숫자 하나"</b><br>그 숫자가 바로 다음 대시보드 후보입니다.</p>
+    </div>
+  </div>
+  <div class="talk" style="margin-top:16px;">
+    <span class="who">예시</span> "매주 회의자료가 몇 건 걷혔는지 매번 세요" → 그게 KPI!
+    "마감 지난 공문이 있는지 폴더를 뒤져요" → 그게 마감임박 목록!
+  </div>
+</section>
+
+<section>
+  <h2><span class="no">6</span>(선택) 나중에 자리에서 해보는 5분 미션</h2>
+  <p>오늘은 안 하셔도 됩니다. 궁금해진 분만, 자리에 돌아가서 <b>새 구글 시트</b>를 하나 열고 딱 두 칸만 채워 보세요.</p>
+  <div class="scroll">
+  <table>
+    <tr><th style="width:18%">칸</th><th style="width:40%">이렇게 입력</th><th>무슨 일이 일어나나</th></tr>
+    <tr>
+      <td><b>A1</b></td>
+      <td><code>=TODAY()</code></td>
+      <td>오늘 날짜가 저절로 나타납니다. 내일 열면 내일 날짜로 바뀌어 있어요 — <b>이게 "자동 갱신"의 씨앗</b>입니다.</td>
+    </tr>
+    <tr>
+      <td><b>B1~B5</b><br>그리고 <b>C1</b></td>
+      <td>B열에 아무 과일 5개 입력 (사과, 배, 사과, 감, 사과)<br><code>=COUNTIF(B1:B5,"사과")</code></td>
+      <td>C1에 <b>3</b>이 나타납니다. "사과만 세 줘"가 된 거예요 — 대시보드 KPI가 바로 이 원리입니다.</td>
+    </tr>
+  </table>
+  </div>
+  <p class="muted">여기까지 되면, 오늘 본 대시보드의 절반은 이미 이해하신 겁니다. 진짜로요.
+  하다가 막히면 언제든 질문 주세요 — 직접 가서 도와드립니다.</p>
+</section>
+
+<section>
+  <h2><span class="no">7</span>자주 묻는 질문</h2>
+  <dl class="faq">
+    <dt>Q. 수식을 못 외우는데 괜찮나요?</dt>
+    <dd>네. 외울 필요 없습니다. "세어 줘 / 골라 줘 / 빼 줘" — 이 세 마디만 기억하면, 필요할 때 방법은 검색(또는 AI에게 질문)하면 됩니다.</dd>
+    <dt>Q. 내가 잘못 만지면 봇이 망가지지 않나요?</dt>
+    <dd>안 망가집니다. 대시보드는 원본과 분리된 별도 시트이고, 통째로 지워져도 '다시 만들기 버튼' 1번이면 복원돼요.</dd>
+    <dt>Q. 특별한 프로그램을 사야 하나요?</dt>
+    <dd>아니요. 전부 무료 구글 시트만으로 만들었습니다. 학교 구글 계정만 있으면 누구나 할 수 있어요.</dd>
+    <dt>Q. 우리 팀 업무에도 쓸 수 있나요?</dt>
+    <dd>바로 그게 오늘 미니 활동의 목적입니다. "매번 세는 숫자"가 있는 업무라면 어디든 같은 방법이 통합니다.</dd>
+  </dl>
+</section>
+
+<section>
+  <h2><span class="no">8</span>다음 일정</h2>
+  <ul>
+    <li><b>9. 4.(금)</b> — 2회차 결과물 제출 마감</li>
+    <li><b>9. 7.(월) 오전 11시</b> — 3회차 자율스터디</li>
+    <li><b>10. 30.(금) 14:00</b> — 성과공유회 (대학본부 3층 대강당)</li>
+  </ul>
+</section>
+
+<footer>
+  AI 마에스트로 자율스터디 2회차 안내문 · 부산대학교 연구진흥과 · 2026. 8. 31.<br>
+  ※ 본 안내문의 공고 수치는 모두 공개 정보(IRIS) 기준입니다.
+</footer>
+
+</div>
+</body>
+</html>
