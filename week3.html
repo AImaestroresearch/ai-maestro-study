@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3주차 — 작은 업무 에이전트 시제품</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+  :root {
+    --navy: #003A70; --gold: #B98E2F; --lightgold: #FDF6E7;
+    --ink: #0B0B0B; --gray: #52514E; --sky: #EEF3FB; --line: #D8E0EE; --bg: #F6F7F9;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "Pretendard", "Malgun Gothic", "맑은 고딕", sans-serif;
+    color: var(--ink); background: var(--bg); line-height: 1.7;
+    padding: 24px 16px 60px;
+  }
+  .wrap { max-width: 860px; margin: 0 auto; }
+  a.back { color: var(--gray); font-size: .85rem; text-decoration: none; }
+  a.back:hover { color: var(--navy); }
+
+  header {
+    background: var(--navy); color: #fff; border-radius: 14px;
+    padding: 34px 38px 30px; margin: 10px 0 22px;
+    border-bottom: 5px solid var(--gold);
+  }
+  header .tag {
+    display: inline-block; border: 1px solid var(--gold); color: #FFD88A;
+    border-radius: 20px; font-size: .8rem; padding: 3px 14px; margin-bottom: 14px;
+  }
+  header h1 { font-size: 1.65rem; line-height: 1.35; font-weight: 800; }
+  header .sub { margin-top: 12px; font-size: .93rem; color: #CFD8E4; }
+
+  .lead {
+    background: var(--lightgold); border: 1px solid #ECD9AB; border-left: 5px solid var(--gold);
+    border-radius: 10px; padding: 18px 24px; margin-bottom: 24px; font-size: 1rem;
+  }
+  .lead b { color: var(--navy); }
+
+  section {
+    background: #fff; border: 1px solid var(--line); border-radius: 14px;
+    padding: 28px 32px; margin-bottom: 20px;
+  }
+  h2 {
+    font-size: 1.15rem; color: var(--navy); font-weight: 800;
+    padding-bottom: 10px; border-bottom: 2px solid var(--sky); margin-bottom: 18px;
+  }
+  h2 .no {
+    display: inline-block; background: var(--navy); color: #FFD88A; font-size: .85rem;
+    border-radius: 6px; padding: 1px 10px; margin-right: 9px; vertical-align: 2px;
+  }
+  p { margin-bottom: 12px; }
+  ul { padding-left: 20px; margin-bottom: 10px; }
+  li { margin-bottom: 8px; }
+  .muted { color: var(--gray); font-size: .88rem; }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 14px; margin-top: 6px; }
+  .card {
+    border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; background: #fff;
+  }
+  .card .step {
+    display: inline-block; background: var(--sky); color: var(--navy); font-weight: 800;
+    font-size: .8rem; border-radius: 6px; padding: 2px 10px; margin-bottom: 8px;
+  }
+  .card h3 { font-size: 1rem; color: var(--navy); margin-bottom: 8px; }
+  .card p { font-size: .9rem; margin-bottom: 0; color: var(--gray); }
+  .card b { color: var(--ink); }
+
+  .scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: .92rem; margin: 8px 0; }
+  th, td { border: 1px solid var(--line); padding: 9px 14px; text-align: left; vertical-align: top; }
+  th { background: var(--navy); color: #fff; font-weight: 700; white-space: nowrap; }
+  td.dim { color: var(--gray); background: var(--bg); }
+  td.hl { background: var(--sky); }
+
+  footer { text-align: center; color: var(--gray); font-size: .83rem; margin-top: 26px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<a class="back" href="index.html">← 자율스터디 제출물 목록</a>
+
+<header>
+  <span class="tag">AI 마에스트로 자율스터디 · 3주차 결과물 (마감 9. 11.)</span>
+  <h1>3주차 — 작은 업무 에이전트 시제품<br>— 주간회의 자료 취합봇</h1>
+  <div class="sub">부산대학교 연구진흥과 · 2026. 9. 8.</div>
+</header>
+
+<p style="margin:-8px 0 18px; font-size:.95rem;">▸ <b>체험판 바로 열기:</b>
+<a href="https://script.google.com/macros/s/AKfycbzsPLNc2g2vtWrNSxm4Y9CU5IrMj69iCRtjTqzudb-4jCvRLXWLt-bmbJywUx9WCG1h/exec" target="_blank" rel="noopener" style="color:var(--navy); font-weight:700;">연구처 주간회의 자료취합 — 데모 →</a>
+<span class="muted">로그인 없이 열립니다. 명단은 가명(팀원 A~H)이고 입력은 데모 시트에만 저장되므로 자유롭게 제출·승인·설정을 눌러보셔도 됩니다.</span></p>
+
+<div class="lead">
+  <b>한 줄 요약:</b> 매주 수요일 오전까지 팀원들이 메일로 보내는 회의자료를 사람이 한글 파일에 옮겨 붙이던 일을,
+  <b>브라우저에서 입력 → 팀장님 승인 → 자동 취합</b>으로 바꾸는 <b>Google Apps Script 웹앱</b>을 만들어 부서에 시범 배포했습니다.
+  글자는 한 자도 고치지 않고 <b>서식만 정리</b>하며, 판단(승인·반려)은 사람이 합니다. 무료·계정 무관·브라우저 기반이라 PC와 휴대폰(카카오톡 안에서도) 모두 열립니다.
+</div>
+
+<section>
+<h2><span class="no">1</span>문제 — 수요일 오전 10시의 풍경</h2>
+<p>연구진흥과는 매주 목요일 주간회의를 합니다. 자료는 <b>회의 전날 오전 10시</b>까지 팀원 17명이 각자 메일로 보내고, 담당자가 한글 파일 하나로 합칩니다.</p>
+<ul>
+  <li>서식이 사람마다 달라(기호·번호·들여쓰기) 합칠 때마다 손으로 맞춥니다.</li>
+  <li>누가 냈고 누가 안 냈는지 메일함을 뒤져 확인합니다. 지각 제출은 팀장님 확인을 따로 받습니다.</li>
+  <li>팀장님이 검토·수정을 요청하면 메일이 한 번 더 오갑니다.</li>
+</ul>
+<p class="muted">규칙이 분명하고 매주 반복되는 일이라 "작은 업무 에이전트"의 첫 소재로 골랐습니다. 1·2주차의 규정 Q&amp;A 봇, 공고 수집봇과 같은 원칙(무료·계정 무관·브라우저)으로 만들었습니다.</p>
+</section>
+
+<section>
+<h2><span class="no">2</span>시제품 화면 — 입력에서 취합까지</h2>
+<div class="cards">
+  <div class="card"><span class="step">① 자료 입력</span><h3>쓰면서 바로 보이는 회의자료</h3>
+    <p>작성자를 고르고 지난실적·추진계획을 평문으로 적으면 오른쪽에 <b>한글 병합본과 같은 모양</b>으로 정리됩니다. 빈 줄로 항목을 나누고, "관련:"으로 시작하면 들여쓰기 — 규칙은 이 둘뿐입니다. 표(과제 목록 등)는 필요할 때만 열·행을 추가하고 연번·합계는 자동입니다.</p></div>
+  <div class="card"><span class="step">② 팀장님 검토</span><h3>승인해야 취합에 들어감</h3>
+    <p>팀별로 제출본이 카드로 뜹니다. <b>승인</b>하면 취합 대상이 되고, <b>반려</b>하면 수정 요청 메모가 저장되어 작성자 입력 화면에 그대로 표시됩니다. 메일을 따로 보낼 필요가 없습니다.</p></div>
+  <div class="card"><span class="step">③ 제출 현황</span><h3>누가 냈는지 한눈에</h3>
+    <p>마감까지 남은 시간, 제출 인원, 각자의 상태(검토 대기·승인 완료·반려·지각)가 표로 보입니다. 담당자는 <b>승인본 모아 보기</b>로 회의자료 순서대로 합쳐진 초안을 바로 확인합니다.</p></div>
+  <div class="card"><span class="step">④ 회의 설정</span><h3>회의가 바뀌면 안내도 바뀜</h3>
+    <p>회의 일시·제출 마감·대면/서면/취소를 담당자가 저장하면 <b>모든 사람의 화면</b>(상단 안내줄, 제출 버튼의 지각 전환 시점)에 즉시 반영됩니다.</p></div>
+</div>
+
+<h3 style="font-size:1rem; color:var(--navy); margin:22px 0 8px;">① 자료 입력 — 왼쪽에 쓰면 오른쪽에 회의자료가 만들어집니다</h3>
+<img src="img/week3-write.jpg" alt="자료 입력 화면 — 작성자 선택, 지난실적·추진계획 입력, 오른쪽에 정리된 회의자료 미리보기" style="max-width:100%; border:1px solid var(--line); border-radius:10px;">
+<p class="muted">제출하면 상단에 "제출됨 · 시각 · 상태"가 표시되고, 승인 전까지 다시 제출하면 이전 내용을 덮어씁니다. 내 제출 취소도 가능합니다.</p>
+
+<h3 style="font-size:1rem; color:var(--navy); margin:22px 0 8px;">② 팀장님 검토 — 승인 전(위) / 승인·반려 후(아래)</h3>
+<img src="img/week3-review-pending.jpg" alt="팀장님 검토 화면 — 검토 대기 카드 2건, 승인·반려 버튼" style="max-width:100%; border:1px solid var(--line); border-radius:10px; margin-bottom:10px;">
+<img src="img/week3-review-done.jpg" alt="팀장님 검토 화면 — 반려(수정 요청 메모 표시)와 승인 완료" style="max-width:100%; border:1px solid var(--line); border-radius:10px;">
+
+<h3 style="font-size:1rem; color:var(--navy); margin:22px 0 8px;">③ 제출 현황과 승인본 취합 미리보기</h3>
+<img src="img/week3-status.jpg" alt="제출 현황 표 — 마감 카운트다운, 8명 중 2명 제출, 상태 배지" style="max-width:100%; border:1px solid var(--line); border-radius:10px; margin-bottom:10px;">
+<img src="img/week3-merged.jpg" alt="승인본 취합 미리보기 — 팀 순서로 합쳐진 회의자료 초안" style="max-width:100%; border:1px solid var(--line); border-radius:10px;">
+<p class="muted">화면은 모두 체험판(가명 명단·예시 내용)입니다. 부서 실사용판은 같은 화면에 <b>부서 코드 4자리 입장 단계</b>가 붙어 있고 실명 명단을 씁니다.</p>
+</section>
+
+<section>
+<h2><span class="no">3</span>어떻게 만들었나 — 설계 원칙</h2>
+<ul>
+  <li><b>규칙은 봇, 판단은 사람.</b> 봇은 서식만 정리하고 글자는 고치지 않습니다. 취합에 넣을지 말지는 팀장님이 승인으로 정합니다.</li>
+  <li><b>기존 방식과 병행.</b> 메일 취합은 그대로 유지하고, 써보고 싶은 사람만 봇을 씁니다. 안 쓰는 사람에게 부담을 주지 않습니다.</li>
+  <li><b>개인정보를 싣지 않는다.</b> 저장되는 것은 이름과 회의자료 내용만입니다. 실명 명단은 서버 코드 안에만 두고 저장소에도 화면 소스에도 넣지 않습니다. 코드 확인 전에는 명단이 브라우저로 내려가지 않습니다.</li>
+  <li><b>무료·계정 무관·브라우저.</b> Google Apps Script 웹앱 + Google Sheets. 데이터는 부서 계정 드라이브의 시트 한 장(제출·설정·기록 탭)에 쌓이고, 배포 계정이 바뀌어도 코드 한 벌로 5분 안에 다시 올릴 수 있습니다.</li>
+</ul>
+<div class="scroll"><table>
+  <tr><th>항목</th><th>구현</th></tr>
+  <tr><td>화면</td><td>HTML 한 장(탭 5개). 입력 → 미리보기 변환은 브라우저에서 규칙 기반으로 처리(AI 미사용)</td></tr>
+  <tr><td>서버</td><td>Apps Script 함수 11개 — 코드 확인, 제출/재제출, 불러오기, 취소, 현황, 검토 목록, 승인/반려, 승인본 취합, 설정 읽기/저장</td></tr>
+  <tr><td>저장</td><td>시트 「제출」 17열(회의일·작성자·팀·상태·시각·본문·표·반려메모·미리보기HTML 등). 회의일+작성자를 키로 덮어쓰기. 동시 제출은 잠금으로 보호</td></tr>
+  <tr><td>접근</td><td>웹앱은 "모든 사용자"로 열되, 첫 화면에서 <b>부서 코드 4자리</b>를 서버가 확인해야 명단·입력 화면이 열림(기기에 기억). 체험판은 코드 없이 열리는 별도 배포</td></tr>
+  <tr><td>모든 서버 호출</td><td>부서 코드를 함께 보내 서버가 매번 재검증</td></tr>
+</table></div>
+</section>
+
+<section>
+<h2><span class="no">4</span>실측 — 접속이 최대 리스크였다</h2>
+<p>1회차 규정 Q&amp;A 봇에서 배운 대로, 기능보다 <b>"모두가 열 수 있는가"</b>를 먼저 확인했습니다. 첫 배포는 "부산대 계정 사용자만" 접근으로 했는데 PC에서는 열렸지만 휴대폰에서는 학교 로그인과 웹앱 화면이 서로 넘겨주기를 반복해 열리지 않았습니다.</p>
+<div class="scroll"><table>
+  <tr><th>배포 방식</th><th>PC 크롬</th><th>휴대폰 크롬</th><th>카카오톡 안에서</th><th>판정</th></tr>
+  <tr><td class="dim">학교 계정 사용자만</td><td>열림</td><td>로그인 반복, 열리지 않음</td><td>파일을 열 수 없음</td><td class="dim">폐기</td></tr>
+  <tr><td class="hl">모든 사용자 + 부서 코드</td><td>열림</td><td>열림</td><td>열림</td><td class="hl">채택</td></tr>
+</table></div>
+<ul>
+  <li><b>결정 기준:</b> "폰으로 안 열리면 소용없다." 회의자료는 자리에서만 쓰는 게 아니라 출장·이동 중에도 내야 하기 때문입니다.</li>
+  <li><b>대신 지킨 것:</b> 코드 확인 전에는 화면 소스에도 이름이 없고, 틀린 코드는 잠시 지연 후 거절합니다. 링크만으로는 명단이 보이지 않습니다.</li>
+  <li><b>저장 기능 검증(9/8):</b> 제출 → 현황 표 → 팀장님 승인 → 승인본 취합 → 회의 설정 저장 후 재접속까지 실제로 눌러 확인했고, 그 과정에서 시트가 시각 문자열을 날짜형으로 바꿔 표기가 깨지는 문제 등 4건을 찾아 고쳤습니다.</li>
+</ul>
+</section>
+
+<section>
+<h2><span class="no">5</span>부서 스터디 세션 기록 — 9/7(월)</h2>
+<p>주당 총 3시간 = <b>이론 1시간</b>(11:00 모임) + <b>실습 2시간</b>(각자 자리에서 자율)으로 진행했습니다. 팀장님 출장 주간이었고, 이번 주는 다들 업무가 바빠 모임은 성사되지 않아 자료와 취합봇 링크를 부서 단체 대화방에 공유해 진행했습니다.</p>
+<ul>
+  <li><b>이론 자료:</b> 「세상 이야기 ①」(요즘 AI 이름들·투자 규모·70년 타임라인) 요약 1장 + 3회차 스터디 안내문(취합봇 소개·참여 방법).</li>
+  <li><b>실습:</b> ① 각자 학교 구글 계정으로 규정 Q&amp;A 봇 접속 확인 ② 취합봇 링크로 들어가 화면 둘러보기. 첫 1회 부서 코드는 자리에서 구두로 전달.</li>
+  <li><b>안내 원칙:</b> 써보실 분만, 메일 취합은 그대로. 불편한 점은 담당자에게.</li>
+</ul>
+</section>
+
+<section>
+<h2><span class="no">6</span>Before / After · 다음 단계</h2>
+<div class="scroll"><table>
+  <tr><th>구분</th><th>Before</th><th>After</th></tr>
+  <tr><td>제출</td><td>메일에 각자 서식으로</td><td>브라우저에서 입력, 서식은 자동 통일</td></tr>
+  <tr><td>검토</td><td>팀장님이 메일로 확인·회신</td><td>화면에서 승인/반려, 수정 요청은 작성자 화면에 표시</td></tr>
+  <tr><td>현황</td><td>메일함을 뒤져 확인</td><td>제출 현황 표 + 마감 카운트다운</td></tr>
+  <tr><td>취합</td><td>사람이 한글 파일에 옮겨 붙임</td><td>승인본을 회의자료 순서로 자동 모음(초안)</td></tr>
+  <tr><td>접속</td><td>—</td><td>PC·휴대폰·카카오톡 모두 확인</td></tr>
+</table></div>
+<p><b>다음 계획:</b> ① 승인본을 <b>한글(hwpx) 병합본 파일</b>로 자동 생성(현재는 화면 초안) ② 별첨 파일 업로드(지금은 파일명만 기록, 파일은 메일로) ③ 수요일 마감 전 리마인드. 부서에서는 기존 메일 취합과 병행하며 첫 피드백을 받는 중입니다.</p>
+</section>
+
+<footer>
+  AI 마에스트로 자율스터디 3주차 제출물 · 부산대학교 연구진흥과 · 2026. 9.<br>
+  ※ 본 페이지의 화면은 가명·예시 내용의 체험판입니다. 부서 실사용판 주소와 부서 코드는 싣지 않습니다.
+</footer>
+
+</div>
+</body>
+</html>
