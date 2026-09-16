@@ -255,7 +255,28 @@ description: 평문 원고(메모장 txt)를 정부 공문서 작성 기준 서�
 </section>
 
 <section>
-<h2><span class="no">4</span>시연 — 왼쪽에 적으면, 오른쪽이 나옵니다</h2>
+<h2><span class="no">4</span>쓰는 법 — 설치 프로그램도, 실행 파일도 아닙니다</h2>
+<p>Skill과 서브에이전트는 <b>프로젝트 폴더 안에 든 설명 파일</b>입니다(<code>.claude/skills/</code>, <code>.claude/agents/</code>). Claude Code로 <b>그 폴더를 열면 자동으로 읽히고</b>, 다른 폴더를 열면 붙지 않습니다. 터미널·데스크톱 앱(Code 탭)·VS Code 확장 어느 쪽이든 같습니다. 별도 설치나 등록 절차는 없습니다.</p>
+<div class="cards" style="grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));">
+  <div class="card gold"><span class="step">① 말로 시키기 (기본)</span><h3>Claude Code에서 그냥 요청</h3>
+    <p>프로젝트 폴더를 연 상태에서 <b>"이 원고를 보고자료 한글 파일로 만들어 줘"</b>라고 적으면, 요청 문구가 Skill 카드의 <code>description</code>과 맞아 카드가 붙고, 절차대로 원고 정리 → 생성기 실행 → 결과 안내가 이어집니다. 원고 정리(기호 순서·날짜 표기·들여쓰기 제거)라는 <b>판단이 필요한 부분</b>을 여기서 맡습니다.</p></div>
+  <div class="card sky"><span class="step">② 이름으로 부르기</span><h3><code>/hwpx-report</code></h3>
+    <p>입력창에 슬래시와 스킬 이름을 치면 카드가 곧바로 붙습니다. 뒤에 원고 파일 경로를 적어도 됩니다. "보고자료 담당에게 맡겨"라고 하면 서브에이전트가 따로 떠서 처리하고 결과 세 줄만 돌아옵니다.</p></div>
+  <div class="card"><span class="step">③ Claude 없이 — 생성기만</span><h3>bat 파일에 원고를 끌어다 놓기</h3>
+    <p><code>도구/hwpx서식/원고_hwpx_변환.bat</code> 위에 원고 txt를 <b>끌어다 놓으면</b> 같은 이름의 hwpx가 옆에 생깁니다. 파이썬만 있으면 되고 AI는 관여하지 않습니다. 단, 원고는 기준 형식(첫 줄 <code>제목:</code>, 줄 맨 앞 기호가 단계)으로 사람이 적어야 합니다 — 정리 판단 없이 <b>"규칙대로 찍어내는"</b> 경로입니다.</p></div>
+</div>
+<div class="scroll" style="margin-top:14px;"><table>
+  <tr><th>필요한 것</th><th>①·②</th><th>③</th></tr>
+  <tr><td>프로젝트 폴더 (Skill·담당 파일·생성기·골격 hwpx 포함)</td><td>필요</td><td>생성기·골격만</td></tr>
+  <tr><td>Claude Code</td><td>필요</td><td>불필요</td></tr>
+  <tr><td>파이썬 3 (표준 라이브러리만, 추가 설치 없음)</td><td>필요</td><td>필요</td></tr>
+  <tr><td>한컴오피스</td><td colspan="2">결과를 열어 볼 때 · <code>--한장</code>(실제 조판으로 쪽수 셈)에만 필요. 생성 자체에는 불필요</td></tr>
+</table></div>
+<p class="muted"><b>다른 부서·다른 사람이 쓰려면</b> 세 가지를 복사하면 됩니다: <code>.claude/skills/hwpx-report/</code> 폴더, 생성기 <code>build_hwpx.py</code>, 골격 <code>서식/골격/골격.hwpx</code>. 부서 기본값(글꼴·여백)은 생성기 맨 위 설정 한 곳만 고칩니다. 생성기 자체는 PC 안에서만 돌고 결과 파일도 PC에 남습니다. 단 ①·②는 원고 정리 판단을 위해 <b>원고 글을 Claude가 읽으므로</b>, 채팅에 붙여 넣는 것과 같은 범위로 서버에 전달됩니다. 개인정보가 든 원고는 ③으로 만들거나 그 자리를 가리고 넘기면 됩니다.</p>
+</section>
+
+<section>
+<h2><span class="no">5</span>시연 — 왼쪽에 적으면, 오른쪽이 나옵니다</h2>
 <div class="demo">
   <div>
     <pre>제목: 한글 문서 서식 기준 마련 추진 현황
@@ -316,12 +337,12 @@ description: 평문 원고(메모장 txt)를 정부 공문서 작성 기준 서�
 </section>
 
 <section>
-<h2><span class="no">5</span>정직하게, 지금 단계 — 된 것 / 안 된 것 / 다음</h2>
+<h2><span class="no">6</span>정직하게, 지금 단계 — 된 것 / 안 된 것 / 다음</h2>
 <div class="scroll"><table>
   <tr><th>구분</th><th>내용</th></tr>
   <tr><td class="hl"><b>된 것</b></td><td>보고자료(한 쪽) 서식 1종 — 기준 문서·골격·생성기·Skill 카드·보고자료 담당 서브에이전트. 한 장 맞추기 자동화(한글 실제 조판 검증). 기준의 출처는 전부 원문 확인(법령·편람).</td></tr>
   <tr><td class="dim"><b>아직 안 된 것</b></td><td>계획(안)·회의록·결과보고·붙임 표·기안문 담당 — 순서대로 추가 예정. 표·그림이 들어가는 문서(지금은 글 위주 문서만). '우리 부서 기본값'(B항) 확정.</td></tr>
-  <tr><td><b>바꾸지 않을 원칙</b></td><td>글자는 한 자도 바꾸지 않음 — 모양만 정리. 내부 문서가 밖으로 나가지 않음(PC 안에서 처리, 외부 AI에 문서 내용을 보내지 않음). 특정 사람의 문서를 표준으로 삼지 않음.</td></tr>
+  <tr><td><b>바꾸지 않을 원칙</b></td><td>글자는 한 자도 바꾸지 않음 — 모양만 정리. 생성기는 PC 안에서만 돌고, Claude 없이 만드는 길(③)을 항상 남겨 둠 — 개인정보가 든 원고는 그 길로. 특정 사람의 문서를 표준으로 삼지 않음.</td></tr>
 </table></div>
 
 <h3>Before / After</h3>
