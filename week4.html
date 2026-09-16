@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4주차 — 문서 작성 에이전트 + 서브에이전트·Skill</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+  :root {
+    --navy: #003A70; --gold: #B98E2F; --lightgold: #FDF6E7;
+    --ink: #0B0B0B; --gray: #52514E; --sky: #EEF3FB; --line: #D8E0EE; --bg: #F6F7F9;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "Pretendard", "Malgun Gothic", "맑은 고딕", sans-serif;
+    color: var(--ink); background: var(--bg); line-height: 1.7;
+    padding: 24px 16px 60px;
+  }
+  .wrap { max-width: 860px; margin: 0 auto; }
+  a.back { color: var(--gray); font-size: .85rem; text-decoration: none; }
+  a.back:hover { color: var(--navy); }
+
+  header {
+    background: var(--navy); color: #fff; border-radius: 14px;
+    padding: 34px 38px 30px; margin: 10px 0 22px;
+    border-bottom: 5px solid var(--gold);
+  }
+  header .tag {
+    display: inline-block; border: 1px solid var(--gold); color: #FFD88A;
+    border-radius: 20px; font-size: .8rem; padding: 3px 14px; margin-bottom: 14px;
+  }
+  header h1 { font-size: 1.65rem; line-height: 1.35; font-weight: 800; }
+  header .sub { margin-top: 12px; font-size: .93rem; color: #CFD8E4; }
+
+  .lead {
+    background: var(--lightgold); border: 1px solid #ECD9AB; border-left: 5px solid var(--gold);
+    border-radius: 10px; padding: 18px 24px; margin-bottom: 24px; font-size: 1rem;
+  }
+  .lead b { color: var(--navy); }
+
+  section {
+    background: #fff; border: 1px solid var(--line); border-radius: 14px;
+    padding: 28px 32px; margin-bottom: 20px;
+  }
+  h2 {
+    font-size: 1.15rem; color: var(--navy); font-weight: 800;
+    padding-bottom: 10px; border-bottom: 2px solid var(--sky); margin-bottom: 18px;
+  }
+  h2 .no {
+    display: inline-block; background: var(--navy); color: #FFD88A; font-size: .85rem;
+    border-radius: 6px; padding: 1px 10px; margin-right: 9px; vertical-align: 2px;
+  }
+  h3 { font-size: 1rem; color: var(--navy); margin: 22px 0 8px; }
+  p { margin-bottom: 12px; }
+  ul { padding-left: 20px; margin-bottom: 10px; }
+  li { margin-bottom: 8px; }
+  .muted { color: var(--gray); font-size: .88rem; }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; margin-top: 6px; }
+  .card { border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; background: #fff; }
+  .card.gold { background: var(--lightgold); border-color: #ECD9AB; }
+  .card.sky { background: var(--sky); }
+  .card .step {
+    display: inline-block; background: var(--navy); color: #FFD88A; font-weight: 800;
+    font-size: .8rem; border-radius: 6px; padding: 2px 10px; margin-bottom: 8px;
+  }
+  .card.gold .step { background: var(--gold); color: #fff; }
+  .card h3 { margin: 0 0 8px; }
+  .card p, .card li { font-size: .9rem; color: var(--gray); }
+  .card p { margin-bottom: 0; }
+  .card ul { margin: 0; padding-left: 18px; }
+  .card b { color: var(--ink); }
+
+  .scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: .92rem; margin: 8px 0; }
+  th, td { border: 1px solid var(--line); padding: 9px 14px; text-align: left; vertical-align: top; }
+  th { background: var(--navy); color: #fff; font-weight: 700; white-space: nowrap; }
+  td.dim { color: var(--gray); background: var(--bg); }
+  td.hl { background: var(--sky); }
+  td.k { font-weight: 700; color: var(--navy); white-space: nowrap; }
+  td.n { font-weight: 800; color: var(--gold); white-space: nowrap; }
+
+  pre {
+    background: #1F2933; color: #E6EDF3; border-radius: 10px; padding: 16px 18px;
+    font-family: Consolas, "D2Coding", monospace; font-size: .82rem; line-height: 1.55;
+    overflow-x: auto; margin: 8px 0 12px; white-space: pre;
+  }
+  pre.light { background: var(--bg); color: var(--ink); border: 1px solid var(--line); }
+  code { font-family: Consolas, "D2Coding", monospace; font-size: .88em; background: var(--sky); padding: 1px 6px; border-radius: 4px; }
+
+  .demo { display: grid; grid-template-columns: 1fr auto 1fr; gap: 12px; align-items: start; margin-top: 8px; }
+  .demo .arrow { align-self: center; color: var(--gold); font-size: 2rem; font-weight: 800; }
+  .demo > div { min-width: 0; }
+  .demo pre { margin: 0; max-width: 100%; }
+  .demo img { width: 100%; border: 1px solid var(--line); border-radius: 10px; display: block; }
+  .demo .cap { font-size: .8rem; color: var(--gray); margin-top: 6px; }
+  @media (max-width: 700px) { .demo { grid-template-columns: 1fr; } .demo .arrow { transform: rotate(90deg); justify-self: center; } }
+
+  .diagram { width: 100%; max-width: 800px; margin: 6px auto 4px; display: block; }
+  .ladder { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 6px 0 10px; }
+  .ladder span { background: var(--sky); color: var(--navy); border-radius: 8px; padding: 6px 14px; font-weight: 700; font-size: .92rem; }
+  .ladder .sep { background: none; color: var(--gold); padding: 0; }
+  .ladder .last { background: var(--lightgold); color: var(--gold); }
+
+  footer { text-align: center; color: var(--gray); font-size: .83rem; margin-top: 26px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<a class="back" href="index.html">← 자율스터디 제출물 목록</a>
+
+<header>
+  <span class="tag">AI 마에스트로 자율스터디 · 4주차 결과물 (마감 9. 18.)</span>
+  <h1>4주차 — 문서 작성 에이전트 + 서브에이전트·Skill<br>— 한글 문서, 내용만 적으세요</h1>
+  <div class="sub">부산대학교 연구진흥과 · 2026. 9. 16.</div>
+</header>
+
+<div class="lead">
+  <b>한 줄 요약:</b> 메모장에 <b>내용만 평문으로</b> 적으면 정부 공문서 작성 기준 서식의 <b>한글 파일(.hwpx)</b>이 나오는 문서 작성 에이전트를 만들었습니다.
+  서식 규칙은 <b>Skill</b>(규칙 카드 한 장)에 적어 두고, 문서 종류별 <b>서브에이전트</b>(담당)가 그 카드를 공유해 쓰는 구조입니다.
+  지금 완성된 담당은 <b>보고자료(한 쪽) 1종</b>이고, 나머지 종류는 같은 카드 방식으로 순서대로 붙입니다. 문서는 PC 밖으로 나가지 않습니다.
+</div>
+
+<section>
+<h2><span class="no">1</span>문제 — 같은 조직의 한글 문서 56건, 서식이 전부 달랐다</h2>
+<p>공유폴더의 한글 문서 56건을 자동으로 읽어 여백·글꼴·줄 간격을 세어 봤습니다. <b>용지(A4 세로 91%)만 일정</b>하고 나머지는 문서마다 달랐습니다.</p>
+<div class="scroll"><table>
+  <tr><th>항목</th><th>종류</th><th>실측 분포</th></tr>
+  <tr><td class="k">여백</td><td class="n">6종류</td><td>상20·하15·좌20·우20 (39%) / 상15·하10 (19%) / 상10·하10 (12%) / 좌우 30 (8%) …</td></tr>
+  <tr><td class="k">본문 글꼴</td><td class="n">4종류</td><td>휴먼명조 43% · 맑은고딕 20% · 함초롬바탕 12% · 한양중고딕 6%</td></tr>
+  <tr><td class="k">본문 크기</td><td class="n">10pt 55%</td><td>12pt 19% · 9pt 7% · 11pt 7% — 같은 종류 문서인데 크기가 다름</td></tr>
+  <tr><td class="k">줄 간격</td><td class="n">3종류</td><td>130% (35%) · 160% (29%) · 120% (14%)</td></tr>
+  <tr><td class="k">글머리 기호</td><td class="n">6종류+</td><td>- 37% · [ 10% · 【 6% · ○ 5% · ※ 4% · ◦ 2%</td></tr>
+</table></div>
+<p><b>왜 이럴까.</b> 기준이 없으니 지난 문서를 복사해서 고쳐 쓰고, 그때마다 서식이 한 번 더 갈라집니다. 검토한 예시 파일 한 건은 그 안에서 줄 간격이 150%·160% 두 벌이었습니다.
+문제는 '한글을 못 다뤄서'가 아니라 <b>골격이 매번 달라서</b>입니다.</p>
+<p class="muted">※ 통계는 수치만 싣습니다. 개별 파일명·내용·작성자는 여기에 싣지 않습니다. 누구의 문서가 '잘못된 예'라는 뜻이 아닙니다 — 기준이 없으면 누구나 그렇게 됩니다.</p>
+</section>
+
+<section>
+<h2><span class="no">2</span>기준 — 남의 문서가 아니라, 정부 공문서 작성 기준</h2>
+<p>어느 문서를 골라도 "그게 표준"이라는 근거가 없습니다. 그래서 바닥은 <b>법령(「행정업무의 운영 및 혁신에 관한 규정 시행규칙」 제2조)과 행정안전부 『행정업무운영 편람』</b>으로 깔고, 기관·부서 사정은 그 위에서 고쳐 씁니다. 출처를 댈 수 있고, 바뀌면 따라가면 됩니다.</p>
+<div class="cards">
+  <div class="card gold"><span class="step">A. 바꾸지 않는 것 (법령)</span><h3>항목 기호와 자리는 법이 정해 둠</h3>
+    <ul>
+      <li>항목 순서: <b>1. → 가. → 1) → 가) → (1) → (가) → ① → ㉮</b></li>
+      <li>둘째 항목부터 상위 항목에서 오른쪽으로 <b>2타씩</b></li>
+      <li>기호와 내용 사이 1타, 두 줄 넘으면 첫 글자에 맞춰 정렬</li>
+      <li>날짜는 마침표로: <b>2026. 9. 16.(수)</b></li>
+      <li>항목이 하나뿐이면 기호를 붙이지 않음</li>
+    </ul></div>
+  <div class="card sky"><span class="step">B. 바꿔도 되는 것 (기본값)</span><h3>글꼴·크기·여백은 부서가 정하면 됨</h3>
+    <ul>
+      <li>여백 위30·아래15·왼20·오른15mm (편람의 기안문 여백)</li>
+      <li>본문 휴먼명조 15pt (실측 최다 글꼴) · 줄 간격 160%</li>
+      <li>제목 HY헤드라인M 20pt 가운데</li>
+      <li>한 쪽에 맞출 때 <b>자간은 -6%, 장평은 92%가 한도</b></li>
+      <li>고치는 곳은 <b>설정 한 군데</b> — 부서마다 다르게 쓸 수 있음</li>
+    </ul></div>
+</div>
+<p class="muted" style="margin-top:12px;">※ 신청서·증명서 같은 「서식」은 기준이 따로 있습니다(시행규칙 [별표 4]: 여백 상·좌·우 20/하 10mm, 돋움 10pt). 이 페이지는 보고자료·기안문 쪽 이야기입니다.</p>
+</section>
+
+<section>
+<h2><span class="no">3</span>에이전트 구조 — Skill은 레시피 카드, 서브에이전트는 문서별 담당</h2>
+<p>이번 주 미션의 핵심 두 단어를 도구 안에 이렇게 배치했습니다.</p>
+<svg class="diagram" viewBox="0 0 800 470" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="문서 작성 에이전트 구조: 원고 → 에이전트 → Skill 카드(A 공유·B 담당별) → 문서 종류별 담당 서브에이전트 → 생성기 → hwpx">
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#B98E2F"/></marker></defs>
+  <style>
+    .bx{fill:#fff;stroke:#D8E0EE;stroke-width:1.5}
+    .nv{fill:#003A70}.gd{fill:#FDF6E7;stroke:#B98E2F;stroke-width:1.5}
+    .t{font-family:Pretendard,"Malgun Gothic",sans-serif;font-size:13px;fill:#0B0B0B}
+    .tb{font-weight:800;fill:#003A70}.tw{fill:#fff;font-weight:800}.ty{fill:#FFD88A;font-weight:800}
+    .tg{fill:#52514E;font-size:11.5px}.ln{stroke:#B98E2F;stroke-width:1.8;fill:none;marker-end:url(#ar)}
+    .dash{stroke-dasharray:5 4;stroke:#9AA5B1}.tdim{fill:#9AA5B1}
+  </style>
+  <rect x="20" y="20" width="200" height="54" rx="9" class="bx"/>
+  <text x="120" y="42" text-anchor="middle" class="t tb">사용자 원고 (메모장 · 평문)</text>
+  <text x="120" y="61" text-anchor="middle" class="t tg">제목: … / 1. 가. 1) - 기호만 붙임</text>
+  <rect x="300" y="20" width="200" height="54" rx="9" class="nv"/>
+  <text x="400" y="42" text-anchor="middle" class="t tw">문서 작성 에이전트</text>
+  <text x="400" y="61" text-anchor="middle" class="t ty">요청을 보고 담당에게 넘김</text>
+  <line x1="220" y1="47" x2="298" y2="47" class="ln"/>
+  <rect x="80" y="120" width="640" height="96" rx="12" class="gd"/>
+  <text x="400" y="145" text-anchor="middle" class="t tb">Skill 카드 · hwpx-report  (규칙을 적어 둔 한 장 — .claude/skills/)</text>
+  <text x="400" y="170" text-anchor="middle" class="t">A. 바꾸지 않는 것(법령) — <tspan font-weight="800">모든 담당이 공유</tspan>  ·  B. 바꿔도 되는 것(기본값) — <tspan font-weight="800">담당마다 다르게</tspan></text>
+  <text x="400" y="195" text-anchor="middle" class="t tg">절차: ① 원고를 기준 형식으로 정리 → ② 생성기 실행 → ③ 결과 안내 (바꾼 것 / 고치지 않은 것)</text>
+  <line x1="400" y1="74" x2="400" y2="118" class="ln"/>
+  <g>
+    <line x1="140" y1="216" x2="140" y2="262" class="ln"/>
+    <rect x="44" y="264" width="192" height="70" rx="9" class="nv"/>
+    <text x="140" y="290" text-anchor="middle" class="t tw">보고자료 담당</text>
+    <text x="140" y="311" text-anchor="middle" class="t ty">✓ 완성 (한 쪽 · 제목 한 줄)</text>
+    <text x="140" y="327" text-anchor="middle" class="t" style="fill:#CFD8E4;font-size:10.5px">담당 파일 hwpx-report-writer.md</text>
+  </g>
+  <g>
+    <line x1="313" y1="216" x2="313" y2="262" class="ln dash" style="marker-end:none"/>
+    <rect x="240" y="264" width="146" height="70" rx="9" class="bx dash"/>
+    <text x="313" y="294" text-anchor="middle" class="t tdim" font-weight="800">계획(안) 담당</text>
+    <text x="313" y="315" text-anchor="middle" class="t tdim">예정 · 여러 쪽</text>
+  </g>
+  <g>
+    <line x1="487" y1="216" x2="487" y2="262" class="ln dash" style="marker-end:none"/>
+    <rect x="414" y="264" width="146" height="70" rx="9" class="bx dash"/>
+    <text x="487" y="294" text-anchor="middle" class="t tdim" font-weight="800">회의록 담당</text>
+    <text x="487" y="315" text-anchor="middle" class="t tdim">예정 · 첫 줄 일시·장소</text>
+  </g>
+  <g>
+    <line x1="660" y1="216" x2="660" y2="262" class="ln dash" style="marker-end:none"/>
+    <rect x="588" y="264" width="146" height="70" rx="9" class="bx dash"/>
+    <text x="660" y="294" text-anchor="middle" class="t tdim" font-weight="800">기안문 · 결과보고 …</text>
+    <text x="660" y="315" text-anchor="middle" class="t tdim">예정</text>
+  </g>
+  <line x1="140" y1="334" x2="140" y2="378" class="ln"/>
+  <rect x="20" y="380" width="380" height="70" rx="9" class="bx"/>
+  <text x="210" y="405" text-anchor="middle" class="t tb">생성기 build_hwpx.py — PC 안에서만 실행</text>
+  <text x="210" y="425" text-anchor="middle" class="t tg">골격 hwpx의 글꼴·구조를 물려받고, 문단 모양은 기준대로 새로 만들고,</text>
+  <text x="210" y="441" text-anchor="middle" class="t tg">내용만 원고에서 채움 (변환이 아니라 직접 생성)</text>
+  <line x1="400" y1="415" x2="478" y2="415" class="ln"/>
+  <rect x="480" y="380" width="300" height="70" rx="9" class="gd"/>
+  <text x="630" y="405" text-anchor="middle" class="t tb">결과 .hwpx (한글 파일)</text>
+  <text x="630" y="425" text-anchor="middle" class="t tg">+ 한 장 맞추기(--한장): 한글로 실제 조판해</text>
+  <text x="630" y="441" text-anchor="middle" class="t tg">쪽수를 세고 자간·장평·줄간격을 한도 안에서 조임</text>
+</svg>
+
+<div class="cards" style="margin-top:14px;">
+  <div class="card gold"><span class="step">Skill = 규칙을 적어둔 카드</span><h3>"우리 문서는 이렇게 쓴다"를 글로 적어 둔 파일</h3>
+    <p>2절의 A·B가 그대로 카드 한 장(<code>SKILL.md</code>)입니다. 한 번 적어 두면 누가 시켜도 같은 서식이 나옵니다. 요리로 치면 레시피 카드 — 사람이 바뀌어도 맛이 같습니다. 카드에 적힌 것은 코드가 아니라 <b>"항목 기호는 이 순서로, 날짜는 마침표로"</b> 같은 말입니다.</p></div>
+  <div class="card sky"><span class="step">서브에이전트 = 문서 종류별 담당</span><h3>보고자료 담당 · 계획(안) 담당 · 회의록 담당 …</h3>
+    <p>문서 종류마다 규칙이 조금씩 다르니 담당을 나눕니다. 큰 주방에서 국·구이·후식을 각자 맡는 것과 같습니다. 담당 파일에는 <b>이 문서만의 다른 점</b>(한 쪽인가, 첫 줄이 무엇인가, 기본값)만 적고, 공통 규칙은 카드를 가리킵니다. 지금은 <b>보고자료 담당 하나</b>가 완성됐고, 나머지는 같은 방식으로 붙입니다.</p></div>
+</div>
+
+<h3>실물 — Skill 카드 발췌</h3>
+<pre class="light">---
+name: hwpx-report
+description: 평문 원고(메모장 txt)를 정부 공문서 작성 기준 서식의 한글 파일(.hwpx)로 만든다.
+             "한글 파일로 만들어줘", "공문서 서식으로", "보고자료 hwpx" 요청 때 사용.
+---
+## 절차
+1. 원고를 기준 형식으로 정리한다.  (이 단계가 이 스킬의 판단 부분)
+   - 첫 줄 `제목: ...`
+   - 항목 기호를 법정 순서로: 1. → 가. → 1) → 가) → (1) → (가) → ① → ㉮
+   - ■ ● ▶ ※ ◆ 등 규칙에 없는 기호는 위 순서로 바꾼다. 부연 설명 줄은 - 로 둔다.
+   - 들여쓰기·탭은 전부 지운다(기호를 보고 자동으로 2타씩 넣는다).
+   - 날짜는 2026. 9. 15.(월) 형식. 항목이 하나뿐인 층에는 기호를 붙이지 않는다.
+   - 내용(문장)은 고치지 않는다. 오탈자가 보이면 고치지 말고 결과 안내 때 알려준다.
+2. 생성기를 실행한다.   python 도구/hwpx서식/build_hwpx.py 원고.txt 결과.hwpx [--한장]
+3. 결과를 안내한다. 파일 위치 / 바꾼 것(기호·날짜) / 고치지 않은 것(문장·오탈자)을 3줄 이내로.
+
+## 바꾸지 않는 것 (법령, A항)   ## 바꿔도 되는 것 (B항)   ## 하지 않는 것
+… HTML·DOCX를 거쳐 한글로 변환하지 않는다(표·글머리·글꼴이 깨진다).</pre>
+<p class="muted">담당(서브에이전트) 파일은 열 줄 남짓입니다: "너는 보고자료 담당이다 → 스킬 절차대로 한다 → 이 담당만의 기본값(한 쪽, 제목 한 줄, 15pt) → 표·다른 종류·외부 전송은 하지 않는다."
+<b>작업 분할의 실익</b>은 새 종류를 붙일 때 규칙을 다시 적지 않는다는 것입니다.</p>
+</section>
+
+<section>
+<h2><span class="no">4</span>시연 — 왼쪽에 적으면, 오른쪽이 나옵니다</h2>
+<div class="demo">
+  <div>
+    <pre>제목: 한글 문서 서식 기준 마련 추진 현황
+
+1. 추진 배경
+가. 부서에서 생산한 한글 문서 56건을 전수 분석한
+   결과, 문서마다 서식이 서로 달랐음
+1) 여백 6종, 본문 글꼴 4종, 줄 간격 3종이 혼재
+2) 용지(A4 세로)만 91%로 일정하고 나머지는
+   문서별로 상이
+- 2026. 9. 11. 기준, 파일 자동 분석 결과
+나. 기준이 없어 기존 문서를 복사해 수정하는
+   방식으로 작성되고 …
+
+2. 추진 내용
+가. 정부 공문서 작성 기준을 그대로 기준점으로 채택
+1) 항목 구분은 1., 가., 1), 가), (1), (가), ①, ㉮
+   순서로 표시
+2) 둘째 항목부터는 상위 항목에서 오른쪽으로
+   2타씩 이동
+3) 항목 기호와 내용 사이는 1타를 띄우고 …
+나. 평문 원고를 입력하면 위 기준의 한글 파일이
+   생성되도록 구현
+…
+3. 향후 계획
+가. 보고자료를 시작으로 계획(안), 회의록,
+   결과보고, 붙임 표 순으로 서식을 하나씩 확정
+나. 기관·부서별 사정에 맞추어 글꼴, 크기,
+   줄 간격은 조정하여 사용
+- 이 문서 자체가 해당 방식으로 생성된 첫 결과물임</pre>
+    <div class="cap">원고 (메모장 · 평문). 들여쓰기는 적지 않아도 됩니다 — 기호를 보고 단계를 판단합니다. 예시 원고의 내용은 이 서식 기준 자체를 설명하는 글입니다.</div>
+  </div>
+  <div class="arrow">→</div>
+  <div>
+    <img src="img/week4-result.png" alt="결과 한글 파일(hwpx) 1쪽 — 제목 가운데, 1. 가. 1) - 단계별 2타 들여쓰기, 두 줄 항목은 첫 글자 맞춤">
+    <div class="cap">결과 (한글 hwpx → 1쪽). 줄 간격 140% · 자간 -4% · 장평 96% · 15pt로 조여 한 쪽, 매달린 글자 0. <b>사람이 한 일은 왼쪽 글을 쓴 것뿐입니다.</b></div>
+  </div>
+</div>
+
+<h3>어떻게 동작하나</h3>
+<ul>
+  <li><b>① 평문으로 적는다.</b> 제목과 내용만. 기호는 <code>1.</code> <code>가.</code> <code>1)</code> <code>-</code>처럼 앞에 붙이기만 하면 됩니다.</li>
+  <li><b>② 기호를 보고 단계를 판단한다.</b> '가.'가 보이면 둘째 단계 → 2타 들여쓰기, 두 줄 넘으면 첫 글자에 맞춤. 2타 = 한글 1자 = 영문·숫자 2자로 환산해 계산합니다. 내어쓰기는 기호의 실제 폭(장평·자간 반영)으로 재서, 자간을 바꿔도 정렬이 어긋나지 않습니다.</li>
+  <li><b>③ 한글 파일을 바로 만든다.</b> 워드→한글 '변환'이 아닙니다. 글꼴 목록·문서 구조는 실제 한컴 파일에서 물려받은 <b>골격</b>을 쓰고, 문단 모양은 기준대로 새로 만들고, 내용만 채워 넣습니다. 변환이 없으니 표·글머리·글꼴이 깨질 자리가 없습니다.</li>
+</ul>
+
+<h3>덤 — 한 장 맞추기 (<code>--한장</code>)</h3>
+<p>보고자료가 한두 줄 넘칠 때 실무에서 하는 순서 그대로 조입니다. 글을 자르는 건 마지막입니다.</p>
+<div class="ladder">
+  <span>줄 간격</span><span class="sep">→</span><span>자간 (한도 -6%)</span><span class="sep">→</span><span>장평 (한도 92%)</span><span class="sep">→</span><span class="last">글자 크기 (마지막 수단)</span>
+</div>
+<ul>
+  <li>쪽수는 추정이 아니라 <b>한글로 실제 조판해 PDF를 만들어 셉니다.</b> 그래서 한컴이 설치된 PC에서만 켜지는 옵션입니다.</li>
+  <li>한 쪽에 들어가면 <b>매달린 줄</b>(문단 끝에 한두 글자만 넘어간 줄)까지 빨아올리고, 아래가 비면 줄 간격을 도로 넓혀 한 쪽을 채웁니다.</li>
+  <li>한도를 넘겨야 들어간다면 조이지 않고 <b>"원고를 줄여야 합니다"</b>라고 알립니다. 읽기 나쁜 한 장보다 정직한 한 줄이 낫습니다.</li>
+</ul>
+<p class="muted">생성기(파이썬)는 Claude Code가 작성했고, 저는 기준을 정하고 결과를 한글로 열어 검증하는 쪽을 맡았습니다. 시안 1~3은 들여쓰기 폭·매달린 줄 처리에서 틀려 시안 4에서 통과했습니다.</p>
+</section>
+
+<section>
+<h2><span class="no">5</span>정직하게, 지금 단계 — 된 것 / 안 된 것 / 다음</h2>
+<div class="scroll"><table>
+  <tr><th>구분</th><th>내용</th></tr>
+  <tr><td class="hl"><b>된 것</b></td><td>보고자료(한 쪽) 서식 1종 — 기준 문서·골격·생성기·Skill 카드·보고자료 담당 서브에이전트. 한 장 맞추기 자동화(한글 실제 조판 검증). 기준의 출처는 전부 원문 확인(법령·편람).</td></tr>
+  <tr><td class="dim"><b>아직 안 된 것</b></td><td>계획(안)·회의록·결과보고·붙임 표·기안문 담당 — 순서대로 추가 예정. 표·그림이 들어가는 문서(지금은 글 위주 문서만). '우리 부서 기본값'(B항) 확정.</td></tr>
+  <tr><td><b>바꾸지 않을 원칙</b></td><td>글자는 한 자도 바꾸지 않음 — 모양만 정리. 내부 문서가 밖으로 나가지 않음(PC 안에서 처리, 외부 AI에 문서 내용을 보내지 않음). 특정 사람의 문서를 표준으로 삼지 않음.</td></tr>
+</table></div>
+
+<h3>Before / After</h3>
+<div class="scroll"><table>
+  <tr><th>구분</th><th>Before</th><th>After</th></tr>
+  <tr><td>서식 기준</td><td>지난 문서를 복사해 고침 → 문서마다 갈라짐</td><td>법령·편람 기준 한 장(Skill)으로 고정, 부서 값은 설정 한 곳</td></tr>
+  <tr><td>작성</td><td>내용 쓰고 나서 들여쓰기·기호·글꼴을 손으로 맞춤</td><td>내용만 평문으로, 서식은 자동</td></tr>
+  <tr><td>한 장 맞추기</td><td>자간·장평을 눈대중으로 조이거나 문장을 잘라냄</td><td>정해진 순서·한도 안에서 자동, 안 되면 "원고를 줄여야 합니다"</td></tr>
+  <tr><td>새 문서 종류</td><td>처음부터 다시 서식 잡음</td><td>담당 파일 열 줄 추가 (규칙은 카드 공유)</td></tr>
+</table></div>
+
+<h3>부서 기본값 — 의견을 모으는 중</h3>
+<p>Skill 카드의 B항(글꼴·크기·여백·첫 줄 구조)은 코드가 아니라 <b>"우리 문서는 이렇다"는 말</b>이면 채울 수 있습니다. 4회차 스터디(9. 14.)에서 "내가 자주 쓰는 문서 1종의 <b>바꾸지 않을 것 / 바꿔도 되는 것 3줄</b>"을 적어 보내 주시길 요청했고, 회신이 오는 대로 기준 문서의 "부서 의견" 절과 담당 파일 기본값에 반영합니다. <span class="muted">(이 페이지 작성 시점에는 회신 취합 전입니다.)</span></p>
+
+<p><b>다음 계획:</b> ① 계획(안) 담당 → 회의록 담당 순으로 추가(각각 담당 파일 + 골격 검증) ② 생성기에 표(붙임 표) 기능 ③ 3주차 취합봇의 승인본을 이 생성기로 <b>hwpx 병합본</b>까지 만들기 — 3주차의 "다음 계획 ①"이 이번 주 도구로 이어집니다.</p>
+</section>
+
+<footer>
+  AI 마에스트로 자율스터디 4주차 제출물 · 부산대학교 연구진흥과 · 2026. 9.<br>
+  ※ 실측 통계는 수치만 싣고 개별 문서·작성자 정보는 싣지 않습니다. 결과 화면의 예시 원고는 서식 기준 자체를 설명하는 글입니다.
+</footer>
+
+</div>
+</body>
+</html>
