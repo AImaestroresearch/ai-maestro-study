@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>5주차 — 공시자료 분석 에이전트</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+  :root {
+    --navy: #003A70; --gold: #B98E2F; --lightgold: #FDF6E7;
+    --ink: #0B0B0B; --gray: #52514E; --sky: #EEF3FB; --line: #D8E0EE; --bg: #F6F7F9;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: "Pretendard", "Malgun Gothic", "맑은 고딕", sans-serif; color: var(--ink); background: var(--bg); line-height: 1.7; padding: 24px 16px 60px; }
+  .wrap { max-width: 860px; margin: 0 auto; }
+  a.back { color: var(--gray); font-size: .85rem; text-decoration: none; }
+  a.back:hover { color: var(--navy); }
+  header { background: var(--navy); color: #fff; border-radius: 14px; padding: 34px 38px 30px; margin: 10px 0 22px; border-bottom: 5px solid var(--gold); }
+  header .tag { display: inline-block; border: 1px solid var(--gold); color: #FFD88A; border-radius: 20px; font-size: .8rem; padding: 3px 14px; margin-bottom: 14px; }
+  header h1 { font-size: 1.65rem; line-height: 1.35; font-weight: 800; }
+  header .sub { margin-top: 12px; font-size: .93rem; color: #CFD8E4; }
+  .lead { background: var(--lightgold); border: 1px solid #ECD9AB; border-left: 5px solid var(--gold); border-radius: 10px; padding: 18px 24px; margin-bottom: 24px; font-size: 1rem; }
+  .lead b { color: var(--navy); }
+  section { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 28px 32px; margin-bottom: 20px; }
+  h2 { font-size: 1.15rem; color: var(--navy); font-weight: 800; padding-bottom: 10px; border-bottom: 2px solid var(--sky); margin-bottom: 18px; }
+  h2 .no { display: inline-block; background: var(--navy); color: #FFD88A; font-size: .85rem; border-radius: 6px; padding: 1px 10px; margin-right: 9px; vertical-align: 2px; }
+  h3 { font-size: 1rem; color: var(--navy); margin: 22px 0 8px; }
+  p { margin-bottom: 12px; }
+  ul { padding-left: 20px; margin-bottom: 10px; }
+  li { margin-bottom: 8px; }
+  .muted { color: var(--gray); font-size: .88rem; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin-top: 6px; }
+  .card { border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; background: #fff; }
+  .card.gold { background: var(--lightgold); border-color: #ECD9AB; }
+  .card.sky { background: var(--sky); }
+  .card .step { display: inline-block; background: var(--navy); color: #FFD88A; font-weight: 800; font-size: .8rem; border-radius: 6px; padding: 2px 10px; margin-bottom: 8px; }
+  .card.gold .step { background: var(--gold); color: #fff; }
+  .card h3 { margin: 0 0 8px; }
+  .card p, .card li { font-size: .9rem; color: var(--gray); }
+  .card p { margin-bottom: 0; }
+  .card ul { margin: 0; padding-left: 18px; }
+  .card b { color: var(--ink); }
+  .scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: .9rem; margin: 8px 0; }
+  th, td { border: 1px solid var(--line); padding: 8px 12px; text-align: left; vertical-align: top; }
+  th { background: var(--navy); color: #fff; font-weight: 700; white-space: nowrap; }
+  td.num { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  td.dim { color: var(--gray); background: var(--bg); }
+  td.hl { background: var(--sky); }
+  tr.focus td { background: var(--lightgold); font-weight: 700; }
+  td.k { font-weight: 700; color: var(--navy); white-space: nowrap; }
+  figure { margin: 14px 0 18px; }
+  figure img { width: 100%; border: 1px solid var(--line); border-radius: 10px; background: #fff; }
+  figcaption { font-size: .85rem; color: var(--gray); margin-top: 6px; }
+  pre.code { background: #0B1F3A; color: #E8EEF7; border-radius: 10px; padding: 16px 18px; font-size: .82rem; line-height: 1.55; overflow-x: auto; white-space: pre-wrap; margin: 10px 0 14px; }
+  pre.code .c { color: #8FB3E0; }
+  .flow { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 6px 0 14px; }
+  .flow span { background: var(--sky); color: var(--navy); border-radius: 8px; padding: 6px 14px; font-weight: 700; font-size: .92rem; }
+  .flow .sep { background: none; color: var(--gold); padding: 0; }
+  .flow .last { background: var(--lightgold); color: var(--gold); }
+  .todo-box { background: var(--navy); color: #fff; border-radius: 12px; padding: 20px 26px; margin: 0 0 24px; border-left: 6px solid var(--gold); }
+  .todo-box h3 { color: #FFD88A; margin: 0 0 12px; font-size: 1.05rem; }
+  .todo-box ol { margin: 0; padding-left: 0; list-style: none; }
+  .todo-box li { margin-bottom: 10px; font-size: .97rem; line-height: 1.6; }
+  .todo-box li:last-child { margin-bottom: 0; }
+  .todo-box b { color: #FFD88A; }
+  .todo-box .muted { color: #CFD8E4; }
+  .todo-box pre { background: #fff; color: #0B0B0B; margin: 10px 0 8px; font-size: .8rem; white-space: pre-wrap; border-radius: 8px; padding: 12px 14px; }
+  footer { text-align: center; color: var(--gray); font-size: .83rem; margin-top: 26px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<a class="back" href="index.html">← 자율스터디 제출물 목록</a>
+
+<header>
+  <span class="tag">AI 마에스트로 자율스터디 · 5주차 결과물 (마감 9. 23.)</span>
+  <h1>5주차 — 공시자료 분석 에이전트<br>— 대학알리미 숫자를 한 문장으로 표·차트·한 장 보고서로</h1>
+  <div class="sub">부산대학교 연구진흥과 · 2026. 9. 21.</div>
+</header>
+
+<div class="lead">
+  <b>한 줄 요약:</b> 대학알리미에 공시된 <b>연구 지표 2개</b>(7-가 전임교원의 연구 실적, 12-가 연구비 수혜 실적)를 받아,
+  "<b>거점국립대 9개교와 비교해 한 장으로</b>"라고 하면 <b>비교표(xlsx) 2종 · 차트 3장 · 한글 보고자료(hwpx) 1쪽</b>이 나오는 분석 에이전트를 만들었습니다.
+  숫자는 <b>공시값만</b> 쓰고(내부 집계 없음), 한글 파일은 <b>4주차 서식 에이전트를 그대로 재사용</b>합니다.
+  <span class="muted">미션 문구의 "수업에서 만든 v0.5"는 저희에게 없어서, 이번 주에 v0.5(부산대 1개교)부터 v1.0(9개교 비교)까지 한 번에 만들었습니다. 부서장 시연은 담당자가 직접 하므로 이 페이지에는 넣지 않습니다.</span>
+</div>
+
+<div class="todo-box">
+  <h3>그래서 여러분은 이것만 하면 됩니다 <span class="muted" style="font-weight:400;font-size:.85rem;">— 처음이어도 그대로 따라 하면 됩니다</span></h3>
+  <ol>
+    <li><b>① 숫자가 어디 있는지 한 번 봅니다</b> → 대학알리미(academyinfo.go.kr) 검색창에 "부산대학교" → <b>대학개별공시 바로가기</b> → <b>교육연구성과</b> 탭. "7-가 전임교원의 연구 실적", "12-가 연구비 수혜 실적" 아래 <b>요약표</b>가 3개년 숫자입니다. 이게 전부입니다.</li>
+    <li><b>② 클로드 앱 상단 [Code] 탭</b> → 바탕화면에 새 폴더를 만들고 열어서 <b>아래 문장을 그대로 붙여 넣으세요.</b> 학교 이름과 항목만 여러분 부서 것으로 바꾸면 됩니다.
+      <pre>대학알리미(academyinfo.go.kr)의 학교별 공시정보 화면에서 "7-가 전임교원의 연구 실적"과 "12-가 연구비 수혜 실적" 요약표를
+부산대학교와 거점국립대 8개교(강원·경북·경상국립·전남·전북·제주·충남·충북, 본교) 것으로 모아 CSV로 저장하는 도구를 만들어 줘.
+그 다음 3개년 비교표(xlsx)와 차트(png)를 만들고, 한 장 보고자료 원고(txt)를 써 줘.
+규칙: 공시값만 쓰고 내부 숫자는 넣지 마. 공시년도와 실적연도를 구분해서 표기하고(2026년 8월 공시 = 2025년 실적) 각주에 출처와 확인일을 써.
+1인당 값은 계산식을 각주에 밝혀. 차트는 부산대만 색을 주고 나머지는 회색으로. 규칙은 .claude/skills/ 안에 카드(SKILL.md)로 저장해 줘.</pre></li>
+    <li><b>③ 결과 표를 대학알리미 화면과 한 칸 대조합니다</b> → 예: 부산대 2025년 연구비 계. 같으면 됐고, 다르면 "이 칸이 화면과 달라"라고 말로 알려 주면 고쳐 옵니다. <span class="muted">화면별 순서는 맨 아래에 있습니다.</span></li>
+  </ol>
+</div>
+
+<section>
+<h2><span class="no">1</span>문제 — 공시 숫자는 공개돼 있는데, 비교는 매번 손으로</h2>
+<p>연구진흥과는 연구 성과·통계를 총괄합니다. 사업 성과지표를 보고할 때 대학정보공시 원자료와 <b>교차검증</b>을 하고, "우리가 다른 거점국립대와 비교해 어디쯤인가"라는 질문도 받습니다.
+그런데 대학알리미의 숫자는 <b>학교 한 곳씩, 항목 한 개씩</b> 화면에 나옵니다. 9개교 × 2항목 × 3개년을 비교하려면 열여덟 번 화면을 열고 옮겨 적어야 하고, 공시년도와 실적연도가 한 해 어긋나 있어 표를 만들 때마다 헷갈립니다.</p>
+<div class="cards">
+  <div class="card sky"><span class="step">있는 것</span><h3>공개된 정확한 숫자</h3><p>대학알리미 공시값. 대학 단위 집계라 <b>개인정보가 없고</b>, 공공누리 자유이용입니다. 4회차에서 나눈 3단계 기준의 ①("그냥 읽혀도 되는 자료") 실물 예시입니다.</p></div>
+  <div class="card gold"><span class="step">없던 것</span><h3>한 번에 모아 보는 표</h3><p>9개교를 나란히 놓은 표와 추이 그래프, 그리고 그걸 부서 보고서 서식에 옮긴 한 장.</p></div>
+</div>
+</section>
+
+<section>
+<h2><span class="no">2</span>데이터 — 두 항목, 아홉 학교, 세 해</h2>
+<div class="scroll"><table>
+  <tr><th>항목</th><th>내용</th><th>이 페이지에서 쓴 값</th></tr>
+  <tr><td class="k">7-가. 전임교원의 연구 실적</td><td>논문(국내·국제, 환산 편수), 저·역서, 전임교원 1인당 논문</td><td>1인당 논문(국제기준), 1인당 SCI급·SCOPUS — <b>공시값 그대로</b></td></tr>
+  <tr><td class="k">12-가. 연구비 수혜 실적</td><td>교내·교외(중앙정부·지자체·민간·외국) 과제 수·연구비(천원), 대응자금</td><td>연구비 계(억원), 전임교원 1인당(백만원, <b>계 ÷ 전임교원 수 자체 계산</b>), 교외 비중</td></tr>
+</table></div>
+<ul>
+  <li><b>비교군 = 거점국립대 9개교</b>(부산·강원·경북·경상국립·전남·전북·제주·충남·충북, 본교). 캠퍼스는 제외.</li>
+  <li><b>실적연도 2023~2025 = 공시년도 2024~2026.</b> 매년 8월 공시. 표와 차트는 <b>실적연도</b>로 적고 각주에 공시년도를 씁니다. 대학알리미 화면이 제공하는 요약표가 3개년이라 <b>5년 추이는 만들 수 없었습니다</b>(공개 범위 밖).</li>
+  <li>자료를 가져온 방법: 학교별 공시정보 화면의 <b>요약표</b>를 그대로 저장했습니다(18회, 학교 사이 1초 쉼). 화면의 「보기 → Excel」로 사람이 받는 원자료 파일도 같은 숫자입니다.</li>
+  <li>화면에 표시되지 않는 열 2개는 뜻을 확인할 수 없어 <b>쓰지 않았습니다.</b> 보고서 화면에 있는 작성자·확인자 이름은 어디에도 옮기지 않았습니다.</li>
+</ul>
+</section>
+
+<section>
+<h2><span class="no">3</span>에이전트 구조 — 4주차 카드에 담당 하나를 더 붙였습니다</h2>
+<div class="flow">
+  <span>요약표 CSV (데이터/공시)</span><span class="sep">▶</span>
+  <span>분석 담당 disclosure-analyst</span><span class="sep">▶</span>
+  <span>비교표 xlsx · 차트 png · 원고 txt</span><span class="sep">▶</span>
+  <span>보고자료 담당 hwpx-report-writer (4주차)</span><span class="sep">▶</span>
+  <span class="last">한글 보고자료 .hwpx</span>
+</div>
+<div class="cards">
+  <div class="card"><span class="step">Skill</span><h3>disclosure-report (규칙 카드)</h3><ul>
+    <li>실적연도로 표기, 각주에 공시년도</li><li>출처 문구 형식 · 확인일</li><li>1인당 연구비는 자체 산식임을 각주로</li><li>기준 학교 하나만 색, 두 축 그래프 금지</li><li>내부 집계·미공시·개인 단위 자료 금지, 다른 대학을 "못한 예"로 쓰지 않음</li></ul></div>
+  <div class="card sky"><span class="step">서브에이전트</span><h3>disclosure-analyst (분석 담당)</h3><ul>
+    <li>자료 확인 → <code>analyze.py</code> 실행 → 표 한 칸을 원자료와 대조</li><li>기본값: 기준 부산대, 비교군 거점국립대, 단위 억원·백만원·환산 편수</li><li>한글 파일 서식(A항)은 건드리지 않음 — 보고자료 담당의 일</li></ul></div>
+  <div class="card gold"><span class="step">재사용</span><h3>hwpx-report + 보고자료 담당 (4주차)</h3><ul>
+    <li>원고 txt를 정부 공문서 서식 hwpx로</li><li>새로 만든 것 없음 — 원고를 D항 형식(제목: / 1. 가.)으로 써 주기만</li><li>표·차트는 생성기 한계로 붙임 파일</li></ul></div>
+</div>
+<h3>Skill 카드 발췌</h3>
+<pre class="code"><span class="c">## 바꾸지 않는 것 (표기 규칙)</span>
+- 실적연도로 표기하고 각주에 공시년도를 쓴다: 2026년 8월 공시 = 2025년 실적. 둘을 섞어 쓰지 않는다.
+- 출처 문구: 대학알리미 {항목번호}. {항목명}, 학교별 공시정보 요약표(본교), YYYY-MM-DD 확인
+- 1인당 연구비는 자체 계산(계 ÷ 전임교원 수)임을 각주로 남긴다. 1인당 논문은 공시값 그대로.
+- 차트는 기준 학교 하나만 남색, 나머지는 회색. 9개교에 9색을 주지 않는다. 두 축 그래프를 만들지 않는다.
+<span class="c">## 하지 않는 것</span>
+- 내부 실집계·미공시 자료·개인 단위 자료를 넣지 않는다(대학 단위 공개 집계만).
+- 다른 대학을 "못한 예"로 지목하는 문장을 쓰지 않는다. 순위는 참고용으로만.</pre>
+<p class="muted">파일: <code>.claude/skills/disclosure-report/SKILL.md</code> · <code>.claude/agents/disclosure-analyst.md</code> · <code>도구/공시분석/fetch_summary.py</code>(요약표 저장) · <code>도구/공시분석/analyze.py</code>(표·차트·원고). 생성기와 스킬 카드는 Claude Code가 작성했고, 코드는 직접 쓰지 않았습니다.</p>
+</section>
+
+<section>
+<h2><span class="no">4</span>결과 — 한 문장에 표 2종, 차트 3장, 한글 1쪽</h2>
+<p>입력한 문장: <b>"연구비 수혜 실적과 연구 실적, 거점국립대 비교, 한 장으로"</b> → <code>python 도구/공시분석/analyze.py --hwpx</code> 가 돌고 아래가 나옵니다(실행 약 10초).</p>
+
+<h3>표 1. 연구비 수혜 실적 — 거점국립대 9개교, 2023~2025 실적</h3>
+<div class="scroll"><table>
+  <tr><th>학교</th><th>2023 계(억원)</th><th>2024 계(억원)</th><th>2025 계(억원)</th><th>2025 1인당(백만원)</th><th>2025 교외 비중</th><th>2025 과제 수</th></tr>
+  <tr class="focus"><td>부산대학교</td><td class="num">2,200.5</td><td class="num">2,066.4</td><td class="num">2,168.9</td><td class="num">150.6</td><td class="num">93.1%</td><td class="num">2,809</td></tr>
+  <tr><td>강원대학교</td><td class="num">1,077.3</td><td class="num">1,023.0</td><td class="num">1,054.2</td><td class="num">124.6</td><td class="num">98.7%</td><td class="num">834</td></tr>
+  <tr><td>경북대학교</td><td class="num">2,337.8</td><td class="num">2,246.3</td><td class="num">2,535.6</td><td class="num">177.3</td><td class="num">94.2%</td><td class="num">3,008</td></tr>
+  <tr><td>경상국립대학교</td><td class="num">1,175.1</td><td class="num">1,071.8</td><td class="num">1,199.5</td><td class="num">114.1</td><td class="num">90.3%</td><td class="num">1,354</td></tr>
+  <tr><td>전남대학교</td><td class="num">1,813.9</td><td class="num">1,815.0</td><td class="num">2,111.9</td><td class="num">180.3</td><td class="num">85.6%</td><td class="num">3,051</td></tr>
+  <tr><td>전북대학교</td><td class="num">1,818.1</td><td class="num">1,770.4</td><td class="num">1,806.8</td><td class="num">169.8</td><td class="num">89.5%</td><td class="num">2,498</td></tr>
+  <tr><td>제주대학교</td><td class="num">660.9</td><td class="num">676.3</td><td class="num">667.6</td><td class="num">104.3</td><td class="num">87.2%</td><td class="num">904</td></tr>
+  <tr><td>충남대학교</td><td class="num">1,722.6</td><td class="num">1,772.8</td><td class="num">1,959.0</td><td class="num">183.9</td><td class="num">97.0%</td><td class="num">2,093</td></tr>
+  <tr><td>충북대학교</td><td class="num">985.4</td><td class="num">976.7</td><td class="num">1,147.0</td><td class="num">140.2</td><td class="num">98.0%</td><td class="num">999</td></tr>
+</table></div>
+<p class="muted">출처: 대학알리미 12-가. 연구비 수혜 실적, 학교별 공시정보 요약표(본교). 실적연도 2023~2025 = 공시년도 2024~2026(매년 8월 공시). 2026-09-21 확인. 1인당 = 연구비 계 ÷ 전임교원 수(자체 계산, 공시 산식과 다를 수 있음). 교외 비중 = (계 − 교내) ÷ 계, 대응자금 제외.</p>
+
+<h3>표 2. 전임교원 연구 실적 — 1인당 논문(공시값 그대로)</h3>
+<div class="scroll"><table>
+  <tr><th>학교</th><th>2023 국제기준</th><th>2024 국제기준</th><th>2025 국제기준</th><th>2023 SCI급·SCOPUS</th><th>2024 SCI급·SCOPUS</th><th>2025 SCI급·SCOPUS</th><th>2025 전임교원</th></tr>
+  <tr class="focus"><td>부산대학교</td><td class="num">0.569</td><td class="num">0.623</td><td class="num">0.695</td><td class="num">0.558</td><td class="num">0.616</td><td class="num">0.687</td><td class="num">1,440</td></tr>
+  <tr><td>강원대학교</td><td class="num">0.530</td><td class="num">0.550</td><td class="num">0.549</td><td class="num">0.522</td><td class="num">0.541</td><td class="num">0.539</td><td class="num">846</td></tr>
+  <tr><td>경북대학교</td><td class="num">0.664</td><td class="num">0.650</td><td class="num">0.675</td><td class="num">0.653</td><td class="num">0.640</td><td class="num">0.657</td><td class="num">1,430</td></tr>
+  <tr><td>경상국립대학교</td><td class="num">0.426</td><td class="num">0.465</td><td class="num">0.595</td><td class="num">0.422</td><td class="num">0.455</td><td class="num">0.581</td><td class="num">1,051</td></tr>
+  <tr><td>전남대학교</td><td class="num">0.573</td><td class="num">0.547</td><td class="num">0.617</td><td class="num">0.561</td><td class="num">0.536</td><td class="num">0.605</td><td class="num">1,171</td></tr>
+  <tr><td>전북대학교</td><td class="num">0.596</td><td class="num">0.623</td><td class="num">0.624</td><td class="num">0.587</td><td class="num">0.610</td><td class="num">0.611</td><td class="num">1,064</td></tr>
+  <tr><td>제주대학교</td><td class="num">0.436</td><td class="num">0.465</td><td class="num">0.448</td><td class="num">0.423</td><td class="num">0.464</td><td class="num">0.438</td><td class="num">640</td></tr>
+  <tr><td>충남대학교</td><td class="num">0.630</td><td class="num">0.652</td><td class="num">0.669</td><td class="num">0.618</td><td class="num">0.647</td><td class="num">0.661</td><td class="num">1,065</td></tr>
+  <tr><td>충북대학교</td><td class="num">0.607</td><td class="num">0.603</td><td class="num">0.673</td><td class="num">0.601</td><td class="num">0.600</td><td class="num">0.670</td><td class="num">818</td></tr>
+</table></div>
+<p class="muted">출처: 대학알리미 7-가. 전임교원의 연구 실적, 학교별 공시정보 요약표(본교). 논문 수는 참여 저자 수로 나눈 환산 편수. 2026-09-21 확인.</p>
+
+<h3>차트 3장 — 기준 학교만 색, 나머지는 회색</h3>
+<figure><img src="img/week5-total-2025.png" alt="연구비 수혜 실적 계, 2025년 실적, 거점국립대 9개교 가로 막대 차트"><figcaption>차트 1. 연구비 계(억원), 2025년 실적. 경북대 2,536 · 부산대 2,169 · 전남대 2,112 순.</figcaption></figure>
+<figure><img src="img/week5-per-faculty.png" alt="전임교원 1인당 연구비 3개년 추이 라인 차트"><figcaption>차트 2. 전임교원 1인당 연구비(백만원) 3개년 추이. 부산대 152.2 → 143.3 → 150.6. 9개교 중 5위(2025).</figcaption></figure>
+<figure><img src="img/week5-sci.png" alt="전임교원 1인당 SCI급·SCOPUS 논문 3개년 추이 라인 차트"><figcaption>차트 3. 1인당 SCI급·SCOPUS 논문(환산 편) 3개년 추이. 부산대 0.558 → 0.616 → 0.687, 2025년 9개교 중 1위.</figcaption></figure>
+
+<h3>한글 보고자료 1쪽 — 4주차 생성기가 만든 원고 그대로</h3>
+<pre class="code">제목: 연구 공시 지표 비교 — 부산대 vs 거점국립대 (2023~2025 실적)
+1. 개요
+가. 대학알리미 공시 항목 7-가(전임교원의 연구 실적)·12-가(연구비 수혜 실적)로 부산대와 거점국립대 8개교를 비교함
+나. 자료는 학교별 공시정보 요약표(본교) 공시값만 사용, 실적연도 2023~2025(공시년도 2024~2026)
+2. 연구비 수혜 실적
+가. 연구비 계는 2023년 2,200억 원에서 2025년 2,169억 원으로 -1.4%, 2025년 9개교 중 2위
+나. 전임교원 1인당 연구비는 2025년 150.6백만 원으로 9개교 중 5위(계 ÷ 전임교원 수, 자체 계산)
+다. 2025년 교외 연구비 비중 93.1%, 과제 수 2,809건
+3. 전임교원 연구 실적
+가. 1인당 SCI급·SCOPUS 논문은 2023년 0.558편에서 2025년 0.687편, 2025년 9개교 중 1위
+나. 1인당 논문(국제기준) 2025년 0.695편, 전임교원 1,440명
+4. 유의사항
+가. 공시년도와 실적연도가 다름(2026년 8월 공시 = 2025년 실적), 표기는 실적연도 기준
+나. 1인당 연구비는 자체 산식이며 공시·내부 집계 산식과 다를 수 있음, 내부 실집계 수치는 포함하지 않음
+다. 비교 대상 9개교의 규모·학문 구성이 달라 순위는 참고용
+- 붙임: 비교표 2종(xlsx)·차트 3장(png), 출처 대학알리미(2026. 9. 21. 확인)</pre>
+<p class="muted">이 원고가 <code>보고자료_공시분석_부산대_2023-2025.hwpx</code>(정부 공문서 서식, 1쪽)로 만들어졌습니다. 문장은 숫자에서 자동으로 채워지고, 사람은 결론·해석 문장을 덧붙이면 됩니다.</p>
+</section>
+
+<section>
+<h2><span class="no">5</span>정직하게, 지금 단계 — 된 것 / 안 된 것 / 다음</h2>
+<div class="scroll"><table>
+  <tr><th>구분</th><th>내용</th></tr>
+  <tr><td class="hl"><b>된 것</b></td><td>연구 지표 2항목 · 거점국립대 9개교 · 3개년 → 비교표 2종(csv·xlsx), 차트 3장, 원고, 한글 보고자료. 규칙 카드(Skill) 1장 + 분석 담당(서브에이전트) 1개. 4주차 보고자료 담당 재사용. 표의 숫자는 대학알리미 화면과 대조(부산대 2025 연구비 계 216,891,243천원 = 2,168.9억원).</td></tr>
+  <tr><td class="dim"><b>아직 안 된 것</b></td><td><b>5년 추이</b> — 화면 요약표가 3개년만 제공. 그 이전은 공시자료 파일을 따로 받아야 하며 아직 안 했습니다. <b>다른 항목</b>(12-타 기술이전, 12-파 특허, 13-나 부설연구소)은 열 이름표를 안 만들었습니다. 한글 보고자료에 <b>표·차트를 직접 넣는 것</b>(4주차 생성기 한계, 지금은 붙임). 사람이 대학알리미 「보기 → Excel」로 받은 원자료 파일을 읽는 부분(팝업 창 방식이라 이번엔 요약표 저장으로 대신).</td></tr>
+  <tr><td><b>미션 문구와 다른 점</b></td><td>"수업에서 만든 v0.5를 다듬어"라고 되어 있지만 저희에게 v0.5가 없어 이번 주에 처음부터 만들었습니다. "부서장 시연"은 담당자가 직접 진행하고, 이 페이지에는 시연 장면·반응을 넣지 않습니다.</td></tr>
+  <tr><td><b>바꾸지 않을 원칙</b></td><td>공시값만, 내부 집계 없음. 실적연도·공시년도를 섞지 않음. 다른 대학을 "못한 예"로 쓰지 않음. 대학 단위 공개 집계만 다루어 개인정보 0. 보고서 화면의 작성자·확인자 이름은 옮기지 않음.</td></tr>
+</table></div>
+
+<h3>Before / After</h3>
+<div class="scroll"><table>
+  <tr><th>구분</th><th>Before</th><th>After</th></tr>
+  <tr><td>비교표</td><td>학교 한 곳씩 화면을 열어 옮겨 적음(18회)</td><td>학교 이름만 목록에 있으면 한 번에 저장</td></tr>
+  <tr><td>연도 표기</td><td>공시년도와 실적연도가 표마다 달라 헷갈림</td><td>실적연도로 고정, 각주에 공시년도 — 규칙 카드에 적어 두어 매번 같음</td></tr>
+  <tr><td>차트</td><td>엑셀 기본 색 9개</td><td>기준 학교만 색, 한 그림에 한 축</td></tr>
+  <tr><td>보고서</td><td>숫자를 다시 한글 표에 손으로 입력</td><td>원고가 숫자에서 채워지고, 4주차 서식으로 hwpx</td></tr>
+</table></div>
+
+<p><b>다음 계획:</b> ① 대학알리미 「보기 → Excel」 원자료 파일 읽기(5년 추이) ② 항목 추가는 열 이름표 한 줄씩(12-타·12-파는 산학협력단 영역이라 참고용) ③ 6주차 GAS 미션(10. 1.)은 지출 사전점검봇으로 — 이번 주 규칙 카드 방식을 그대로 씁니다.</p>
+
+<div class="todo-box">
+  <h3>다시 한 번 — 화면 순서대로 <span class="muted" style="font-weight:400;font-size:.85rem;">— 처음이어도 그대로 따라 하면 됩니다</span></h3>
+  <ol>
+    <li><b>0. 준비(한 번만)</b> → 파이썬 설치(python.org, 첫 화면 "Add python.exe to PATH" 체크). 4주차와 같은 준비 하나입니다.</li>
+    <li><b>1. 숫자 확인</b> → 대학알리미 검색창에 "부산대학교" → <b>대학개별공시 바로가기</b> → <b>교육연구성과</b> 탭 → "12-가 연구비 수혜 실적" 요약표에서 <b>2025년 계</b> 숫자를 한 번 봅니다(216,891,243 천원). 나중에 대조할 숫자입니다.</li>
+    <li><b>2. 클로드 앱</b> → 상단 <b>[Code]</b> 탭. Environment = <b>Local</b>, Project folder = <b>바탕화면에 새로 만든 폴더</b>, Permission mode = <b>Manual</b>.</li>
+    <li><b>3. 붙여 넣기</b> → 위 상자의 문장을 그대로 붙여 넣고 Enter. "파이썬 패키지를 설치할까요"(표·차트용) → 예. "사이트에서 자료를 가져올까요" → 예.</li>
+    <li><b>4. 대조</b> → 나온 표에서 부산대 2025년 연구비 계가 <b>2,168.9억 원</b>(= 216,891,243 천원)인지 봅니다. 다르면 말로: "부산대 2025 계가 화면과 달라."</li>
+    <li><b>5. 한글 파일</b> → "이 원고를 4주차 서식으로 한글 파일로 만들어 줘"(4주차 도구가 있는 폴더에서) 또는 원고 txt를 4주차 bat에 끌어다 놓기.</li>
+    <li><b>6. 다음부터</b> → 매년 9월(8월 공시 뒤) 같은 폴더를 열고 "요약표 다시 받아서 표 갱신해 줘". 학교를 바꾸려면 "기준 학교를 경북대로".</li>
+    <li><b>클로드 앱도 없다</b> → 1번의 요약표를 그대로 엑셀에 옮기되, <b>실적연도로 적고 각주에 공시년도와 확인일</b>만 남기면 표가 갈라지지 않습니다. 이 페이지 2절의 규칙입니다.</li>
+  </ol>
+</div>
+</section>
+
+<footer>
+  AI 마에스트로 자율스터디 5주차 제출물 · 부산대학교 연구진흥과 · 2026. 9.<br>
+  ※ 모든 숫자는 대학알리미 공시값(대학 단위 공개 집계)입니다. 내부 집계·미공시 자료·개인 정보는 싣지 않습니다. 순위는 참고용입니다.
+</footer>
+
+</div>
+</body>
+</html>
