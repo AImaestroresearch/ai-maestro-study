@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>6주차 — GAS 자동화 앱 배포</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+  :root {
+    --navy: #003A70; --gold: #B98E2F; --lightgold: #FDF6E7;
+    --ink: #0B0B0B; --gray: #52514E; --sky: #EEF3FB; --line: #D8E0EE; --bg: #F6F7F9;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: "Pretendard", "Malgun Gothic", "맑은 고딕", sans-serif; color: var(--ink); background: var(--bg); line-height: 1.7; padding: 24px 16px 60px; }
+  .wrap { max-width: 860px; margin: 0 auto; }
+  a.back { color: var(--gray); font-size: .85rem; text-decoration: none; }
+  a.back:hover { color: var(--navy); }
+  header { background: var(--navy); color: #fff; border-radius: 14px; padding: 34px 38px 30px; margin: 10px 0 22px; border-bottom: 5px solid var(--gold); }
+  header .tag { display: inline-block; border: 1px solid var(--gold); color: #FFD88A; border-radius: 20px; font-size: .8rem; padding: 3px 14px; margin-bottom: 14px; }
+  header h1 { font-size: 1.65rem; line-height: 1.35; font-weight: 800; }
+  header .sub { margin-top: 12px; font-size: .93rem; color: #CFD8E4; }
+  .lead { background: var(--lightgold); border: 1px solid #ECD9AB; border-left: 5px solid var(--gold); border-radius: 10px; padding: 18px 24px; margin-bottom: 24px; font-size: 1rem; }
+  .lead b { color: var(--navy); }
+  section { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 28px 32px; margin-bottom: 20px; }
+  h2 { font-size: 1.15rem; color: var(--navy); font-weight: 800; padding-bottom: 10px; border-bottom: 2px solid var(--sky); margin-bottom: 18px; }
+  h2 .no { display: inline-block; background: var(--navy); color: #FFD88A; font-size: .85rem; border-radius: 6px; padding: 1px 10px; margin-right: 9px; vertical-align: 2px; }
+  h3 { font-size: 1rem; color: var(--navy); margin: 22px 0 8px; }
+  p { margin-bottom: 12px; }
+  ul { padding-left: 20px; margin-bottom: 10px; }
+  li { margin-bottom: 8px; }
+  .muted { color: var(--gray); font-size: .88rem; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-top: 6px; }
+  .card { border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; background: #fff; }
+  .card.gold { background: var(--lightgold); border-color: #ECD9AB; }
+  .card.sky { background: var(--sky); }
+  .card .step { display: inline-block; background: var(--navy); color: #FFD88A; font-weight: 800; font-size: .8rem; border-radius: 6px; padding: 2px 10px; margin-bottom: 8px; }
+  .card.gold .step { background: var(--gold); color: #fff; }
+  .card h3 { margin: 0 0 8px; }
+  .card p, .card li { font-size: .9rem; color: var(--gray); }
+  .card p { margin-bottom: 0; }
+  .card ul { margin: 0; padding-left: 18px; }
+  .card b { color: var(--ink); }
+  .scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: .9rem; margin: 8px 0; }
+  th, td { border: 1px solid var(--line); padding: 8px 12px; text-align: left; vertical-align: top; }
+  th { background: var(--navy); color: #fff; font-weight: 700; white-space: nowrap; }
+  td.dim { color: var(--gray); background: var(--bg); }
+  td.hl { background: var(--sky); }
+  td.k { font-weight: 700; color: var(--navy); white-space: nowrap; }
+  figure { margin: 14px 0 18px; }
+  figure img { width: 100%; border: 1px solid var(--line); border-radius: 10px; background: #fff; }
+  figure.phone img { max-width: 320px; display: block; }
+  figcaption { font-size: .85rem; color: var(--gray); margin-top: 6px; }
+  .figs { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; align-items: start; }
+  @media (max-width: 640px) { .figs { grid-template-columns: 1fr; } }
+  pre.code { background: #0B1F3A; color: #E8EEF7; border-radius: 10px; padding: 16px 18px; font-size: .82rem; line-height: 1.55; overflow-x: auto; white-space: pre-wrap; margin: 10px 0 14px; }
+  pre.code .c { color: #8FB3E0; }
+  .flow { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 6px 0 14px; }
+  .flow span { background: var(--sky); color: var(--navy); border-radius: 8px; padding: 6px 14px; font-weight: 700; font-size: .92rem; }
+  .flow .sep { background: none; color: var(--gold); padding: 0; }
+  .flow .last { background: var(--lightgold); color: var(--gold); }
+  .todo-box { background: var(--navy); color: #fff; border-radius: 12px; padding: 20px 26px; margin: 0 0 24px; border-left: 6px solid var(--gold); }
+  .todo-box h3 { color: #FFD88A; margin: 0 0 12px; font-size: 1.05rem; }
+  .todo-box ol { margin: 0; padding-left: 0; list-style: none; }
+  .todo-box li { margin-bottom: 10px; font-size: .97rem; line-height: 1.6; }
+  .todo-box li:last-child { margin-bottom: 0; }
+  .todo-box b { color: #FFD88A; }
+  .todo-box .muted { color: #CFD8E4; }
+  .todo-box pre { background: #fff; color: #0B0B0B; margin: 10px 0 8px; font-size: .8rem; white-space: pre-wrap; border-radius: 8px; padding: 12px 14px; }
+  footer { text-align: center; color: var(--gray); font-size: .83rem; margin-top: 26px; }
+  /* 초안 전용: 채울 칸 표시 — 공개 전에 지움 */
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<a class="back" href="index.html">← 자율스터디 제출물 목록</a>
+
+<header>
+  <span class="tag">AI 마에스트로 자율스터디 · 6주차 결과물 (마감 10. 1.)</span>
+  <h1>6주차 — GAS 자동화 앱 배포<br>— 연구진흥과 창구: 어디에 물을지 고르지 않아도 되는 입구 하나</h1>
+  <div class="sub">부산대학교 연구진흥과 · 2026. 9. 30.</div>
+</header>
+
+<div class="lead">
+  <b>한 줄 요약:</b> 하시려는 일을 한 줄로 적으면 <b>규정봇·공고봇·취합봇 가운데 맞는 곳으로 안내</b>하고,
+  <b>회의비 서류는 이 화면 안에서 바로</b> 만들어 주는 웹앱 「연구진흥과 창구」를 <b>Google Apps Script 웹 앱</b>으로 배포했습니다.
+  적은 내용은 <b>화면 밖으로 나가지 않고</b>(서버로 보내지 않음), 서버는 화면을 내려 주고 <b>사용 횟수만</b> 셉니다.
+  <br>배포 주소: <a href="https://script.google.com/macros/s/AKfycbzX3jH00kiiS46d3krmwfoBe7PT1jClHbHcydlXWcpvWUYZtfpcX1FmyUCrSatm744ZOQ/exec" target="_blank" rel="noopener">https://script.google.com/macros/s/AKfycbzX3jH00kiiS46d3krmwfoBe7PT1jClHbHcydlXWcpvWUYZtfpcX1FmyUCrSatm744ZOQ/exec</a>
+</div>
+
+<div class="todo-box">
+  <h3>그래서 여러분은 이것만 하면 됩니다 <span class="muted" style="font-weight:400;font-size:.85rem;">— 처음이어도 그대로 따라 하면 됩니다</span></h3>
+  <ol>
+    <li><b>① 우리 부서에 자주 오는 질문을 세 갈래로 적어 봅니다</b> → 예: "규정이 궁금하다 / 서류를 만들어야 한다 / 일정을 알고 싶다". 갈래마다 지금 안내하는 곳(파일·주소·담당자)을 한 줄씩.</li>
+    <li><b>② 클로드 앱 상단 [Code] 탭</b> → 바탕화면에 새 폴더를 만들고 열어서 <b>아래 문장을 그대로 붙여 넣으세요.</b> 갈래 이름과 안내할 곳만 여러분 부서 것으로 바꾸면 됩니다.
+      <pre>우리 부서 업무 창구 웹앱을 Google Apps Script로 만들어 줘. 화면은 검색창 하나와 예시 버튼 몇 개.
+적은 말을 키워드로 갈라서 "규정 질문 → 규정 안내 주소", "서류 → 이 화면 안의 서류 양식", "그 밖 → 담당자 안내"로 보내 줘.
+규칙: 적은 내용은 서버로 보내지 말고 브라우저 안에서만 처리해. 어디에도 저장하지 마.
+주민등록번호·계좌번호 같은 형태가 보이면 어디로도 보내지 말고 멈춰서 알려 줘.
+서버 파일(Code.gs)은 화면을 내려 주는 doGet과 사용 횟수 세기만 해.
+테스트를 먼저 만들어서(node로 돌아가게) 전부 통과한 뒤에 알려 주고,
+배포 방법(웹 앱, 실행 계정 = 나, 액세스 = 모든 사용자)을 처음 하는 사람 기준으로 README에 적어 줘.</pre></li>
+    <li><b>③ 배포하고 휴대폰으로 열어 봅니다</b> → script.google.com → 새 프로젝트 → 파일 붙여 넣기 → <b>배포 → 새 배포 → 웹 앱</b> → 나온 주소를 <b>PC·휴대폰·카톡 안에서</b> 한 번씩 엽니다. <span class="muted">화면별 순서는 맨 아래에 있습니다.</span></li>
+  </ol>
+</div>
+
+<section>
+<h2><span class="no">1</span>문제 — 도구가 셋이 되자, "어디에 물어야 하지?"부터 고르게 됐습니다</h2>
+<p>그동안 규정 Q&amp;A 봇, 연구공고봇, 주간회의 취합봇을 만들고 다듬었습니다(1~3주차 결과물). 도구가 늘어날수록 쓰는 사람은 질문하기 전에 <b>"이건 어느 도구에 물을 일인가"</b>를 먼저 골라야 합니다. 고르는 일이 한 번 더 생기면 도구를 쓰는 이유가 줄어듭니다.
+그래서 도구를 하나 더 만드는 대신 <b>입구를 하나로 모았습니다.</b></p>
+<p>또 하나, 회의비 기안 전에는 확인할 것이 많습니다. 1인 한도, 주말·공휴일, 결제 시각, 업종, 참석 명단과 인원, 공문 적요 형식, 증빙 서식. 매번 지침을 다시 펼쳐 보는 대신, <b>적는 순간 같은 기준으로 한 번 훑어 주는 화면</b>을 입구 안에 넣었습니다.</p>
+<div class="cards">
+  <div class="card sky"><span class="step">있던 것</span><h3>도구 세 개</h3><p>규정봇(노트북), 공고봇(메일·대시보드 시트), 취합봇(웹 화면). 각각은 잘 돌지만 <b>문이 셋</b>.</p></div>
+  <div class="card gold"><span class="step">이번 주</span><h3>문 하나 + 서랍 하나</h3><p>적은 말로 갈래를 나눠 안내하는 <b>창구</b>, 그리고 창구 안의 <b>회의비 서류 화면</b>.</p></div>
+</div>
+</section>
+
+<section>
+<h2><span class="no">2</span>무엇을 하나 — 한 줄을 적으면 갈래가 정해집니다</h2>
+<div class="flow">
+  <span>하시려는 일 한 줄</span><span class="sep">▶</span>
+  <span>화면 안에서 키워드로 갈래 나누기</span><span class="sep">▶</span>
+  <span class="last">규정봇 · 회의비 서류 · 공고봇 · 취합봇 · 담당자</span>
+</div>
+<div class="scroll"><table>
+  <tr><th>적은 말(예)</th><th>가는 곳</th><th>함께 보여 주는 것</th></tr>
+  <tr><td>회의비 1인 한도가 얼마예요?</td><td class="k">규정봇</td><td>질문 복사 버튼, "규정봇에는 회의록·영수증 같은 파일을 올리지 마세요" 안내</td></tr>
+  <tr><td>간담회 서류 만들어야 해요</td><td class="k">회의비 서류(이 화면 안)</td><td>회의 계획 칸 → 사전 체크 · 기안 문안 · 원인행위 입력표 · 증빙 서식 안내</td></tr>
+  <tr><td>새로 뜬 공고 있나요</td><td class="k">공고봇 대시보드</td><td>대시보드 바로 열기</td></tr>
+  <tr><td>주간회의 자료 내야 해요</td><td class="k">취합봇</td><td>취합봇 바로 열기</td></tr>
+  <tr><td>주민등록번호·계좌번호 형태가 섞인 글</td><td class="k">멈춤</td><td>어디로도 보내지 않고, 빼고 다시 적어 달라고 안내</td></tr>
+  <tr><td>그 밖</td><td class="k">담당자</td><td>문의 안내</td></tr>
+</table></div>
+<h3>회의비 서류 — 회의 전과 회의 뒤</h3>
+<ul>
+  <li><b>회의 전:</b> 제목·내용·일시·장소·참석자·단가를 적으면 <b>사전 체크</b>(지침의 1인 한도, 주말·공휴일, 결제 시각, 주류 업종 단어, 명단 수와 인원 수, 외부인)와 <b>기안 공문 본문</b>, <b>원인행위 입력표</b>가 나옵니다.</li>
+  <li><b>회의 뒤:</b> 영수증 총액·실제 인원·결제 시각을 적으면 <b>사후 체크</b>(총액이 예산 안인지, 결제일이 개최일과 같은지 등)와 회의록·영수증 서식에 옮길 문장이 나옵니다.</li>
+  <li>결과는 <b>「복사」 버튼으로 가져가서</b> 씁니다. 화면을 닫으면 사라집니다. 판정·승인은 담당자와 결재선의 일입니다.</li>
+</ul>
+</section>
+
+<section>
+<h2><span class="no">3</span>구조 — Apps Script 파일 세 개, 규칙은 한 곳에</h2>
+<div class="cards">
+  <div class="card"><span class="step">Code.gs</span><h3>서버: 화면 내려 주기 + 횟수</h3><ul>
+    <li><code>doGet</code>으로 화면을 내려 줌</li><li>익명 사용 횟수만 셈(계획·사후 두 가지)</li><li>입력을 받는 길(<code>doPost</code>, 요청 값 읽기)이 없음</li></ul></div>
+  <div class="card sky"><span class="step">index.html</span><h3>화면: 갈래 나누기 · 서류 · 규칙</h3><ul>
+    <li>갈래 나누기와 모든 계산이 브라우저 안에서</li><li>규칙 숫자는 <code>RULES</code>와 공휴일표 한 곳에만</li><li>PC에서 파일을 더블클릭해도 그대로 동작(시연·백업용)</li></ul></div>
+  <div class="card gold"><span class="step">appsscript.json</span><h3>배포 설정</h3><ul>
+    <li>시간대 Asia/Seoul</li><li>웹 앱 = 배포한 사람 권한으로 실행, 누구나 열 수 있음</li><li>로그인 없이 휴대폰에서 바로</li></ul></div>
+</div>
+<h3>지키기로 한 것을 테스트로 묶었습니다 — 55개, 전부 통과해야 배포</h3>
+<pre class="code"><span class="c">// 화면 코드를 그대로 꺼내 node에서 돌리는 검사(일부)</span>
+✓ 회의비 1인 한도 경계값 · 주말 · 추석 연휴·대체공휴일 · 22시 · 주류 업종 단어 · 명단 수 불일치
+✓ 공문 본문 1~6항목 · 건명 형식 · 적요 형식
+✓ 규정 질문은 규정봇으로, 서류 요청은 이 화면으로, 공고는 공고봇으로, 주간회의는 취합봇으로
+✓ 주민등록번호·계좌번호 형태가 섞이면 어디로도 보내지 않는다
+✓ 화면에 서버·외부로 보내는 코드(fetch·XHR·sendBeacon·form action)가 없다
+✓ 서버로 가는 값은 'plan'·'after' 두 가지뿐이다 · 브라우저 저장소를 쓰지 않는다
+✓ Code.gs는 입력값을 받지도 저장하지도 않는다
+✓ 좁은 화면(휴대폰)에서는 입력창 예시가 한 줄로 줄어든다</pre>
+<p class="muted">누가 나중에 "편하게" 전송이나 저장을 넣으면 위 검사가 바로 빨간색이 됩니다. 새 기능은 테스트를 먼저 쓰고(빨강) 화면을 고쳐(초록) 올립니다. 화면·규칙 코드와 테스트는 Claude Code가 작성했고, 코드는 직접 쓰지 않았습니다.</p>
+</section>
+
+<section>
+<h2><span class="no">4</span>결과 — 배포했고, 한 번 써 봤습니다</h2>
+<div class="scroll"><table>
+  <tr><th>항목</th><th>내용</th></tr>
+  <tr><td class="k">배포 주소</td><td><a href="https://script.google.com/macros/s/AKfycbzX3jH00kiiS46d3krmwfoBe7PT1jClHbHcydlXWcpvWUYZtfpcX1FmyUCrSatm744ZOQ/exec" target="_blank" rel="noopener">https://script.google.com/macros/s/AKfycbzX3jH00kiiS46d3krmwfoBe7PT1jClHbHcydlXWcpvWUYZtfpcX1FmyUCrSatm744ZOQ/exec</a> <span class="muted">(Apps Script 웹 앱, 로그인 없이 열림)</span></td></tr>
+  <tr><td class="k">열어 본 곳</td><td>PC 크롬 · 휴대폰 · 카톡 안 브라우저 — 세 곳 모두 로그인 없이 열리고, 사용 횟수가 서버와 이어짐(9/30 · 휴대폰·카톡은 화면 폭과 브라우저 흉내로 확인)</td></tr>
+  <tr><td class="k">사용 횟수</td><td>1회 <span class="muted">(익명, 사전 체크·사후 체크를 누른 횟수)</span></td></tr>
+  <tr><td class="k">써 본 사람 한마디</td><td>아직 없음(9/30 배포)</td></tr>
+</table></div>
+<div class="figs">
+  <figure><img src="img/week6-home.png" alt="연구진흥과 창구 첫 화면: 검색창 하나와 예시 버튼, 네 갈래 카드"><figcaption>창구 첫 화면. "무엇을 도와드릴까요?" 한 줄 입력과 예시 버튼, 아래 네 갈래.</figcaption></figure>
+  <figure class="phone"><img src="img/week6-phone.png" alt="휴대폰 화면에서 본 연구진흥과 창구"><figcaption>휴대폰(390px). 가로로 넘치지 않고 예시는 한 줄.</figcaption></figure>
+</div>
+<figure><img src="img/week6-rule.png" alt="규정 질문을 적으면 규정봇으로 안내하는 화면"><figcaption>규정 질문을 적으면 규정봇으로 안내하고, 파일을 올리지 말라는 안내를 함께 보여 줍니다.</figcaption></figure>
+</section>
+
+<section>
+<h2><span class="no">5</span>정직하게, 지금 단계 — 된 것 / 안 된 것 / 다음</h2>
+<div class="scroll"><table>
+  <tr><th>구분</th><th>내용</th></tr>
+  <tr><td class="hl"><b>된 것</b></td><td>입구 하나(갈래 6가지)와 회의비 서류(회의 전·회의 뒤)를 Apps Script 웹 앱으로 배포. 테스트 55개 통과(배포하며 「공개돼도 안전한 주소만」 3개 추가). 휴대폰 크기(390px) 화면에서 가로로 넘치지 않음 확인. 적은 말은 화면 밖으로 나가지 않음.</td></tr>
+  <tr><td class="dim"><b>아직 안 된 것</b></td><td><b>다른 재원</b>(국립대육성사업·산학협력단·교비) 회의비 기준 — 재원마다 지침이 달라 7주차에 예외표로. <b>규정봇 답을 창구 안에서 바로 보여 주기</b> — 규정봇은 별도 노트북이라 지금은 주소 안내까지. 영수증 사진 읽기·파일 저장은 <b>일부러 넣지 않았습니다</b>(개인정보가 섞일 수 있어서).</td></tr>
+  <tr><td><b>바꾸지 않을 원칙</b></td><td>적은 말은 서버로 보내지 않는다. 저장하지 않는다. 규칙 숫자는 지침 원문 그대로 한 곳에만. 판정·승인과 최종 확인은 사람.</td></tr>
+</table></div>
+
+<h3>Before / After</h3>
+<div class="scroll"><table>
+  <tr><th>구분</th><th>Before</th><th>After</th></tr>
+  <tr><td>어디에 물을지</td><td>도구 셋 중에서 먼저 고름</td><td>한 줄 적으면 갈래가 정해짐</td></tr>
+  <tr><td>회의비 기안 전 확인</td><td>지침을 펼쳐 항목마다 확인</td><td>적는 순간 같은 기준으로 한 번 훑음</td></tr>
+  <tr><td>공문 적요·원인행위 칸</td><td>지난 공문을 찾아 형식을 맞춤</td><td>적은 내용에서 형식대로 채워져 복사</td></tr>
+</table></div>
+
+<p><b>다음 계획:</b> ① 7주차 — 재원별 예외표(국립대육성·산학협력단·교비)를 같은 규칙 칸에 붙이기 ② 써 본 분 피드백으로 갈래 키워드 다듬기 ③ 규정봇 주소가 바뀌면 화면 맨 위 주소 칸 한 줄만 고치기.</p>
+
+<div class="todo-box">
+  <h3>다시 한 번 — 화면 순서대로 <span class="muted" style="font-weight:400;font-size:.85rem;">— 처음이어도 그대로 따라 하면 됩니다</span></h3>
+  <ol>
+    <li><b>1. 만들기</b> → 클로드 앱 <b>[Code]</b> 탭, Environment = <b>Local</b>, Project folder = <b>바탕화면에 새로 만든 폴더</b>, Permission mode = <b>Manual</b> → 위 상자의 문장을 붙여 넣고 Enter. 테스트가 전부 통과했다고 하면 다음으로.</li>
+    <li><b>2. 새 프로젝트</b> → 크롬에서 학교 계정으로 <b>script.google.com</b> → <b>새 프로젝트</b> → 이름을 알아보기 쉽게 바꿈.</li>
+    <li><b>3. 붙여 넣기</b> → <code>Code.gs</code> 내용을 폴더의 것으로 전부 바꿈 → 왼쪽 <b>＋ → HTML</b>, 이름 <code>index</code> → 폴더의 <code>index.html</code> 전체 붙여 넣기 → 각각 Ctrl+S.</li>
+    <li><b>4. 배포</b> → 오른쪽 위 <b>배포 → 새 배포</b> → 유형 <b>웹 앱</b> → 실행 계정 <b>나</b>, 액세스 <b>모든 사용자</b> → 배포 → 권한 승인(처음 한 번) → <b>웹 앱 URL 복사</b>.</li>
+    <li><b>5. 세 곳에서 열기</b> → PC 크롬, 휴대폰, 카톡 대화방에 붙여 넣어 카톡 안에서. 예시 버튼 하나를 눌러 안내가 뜨면 끝.</li>
+    <li><b>6. 고칠 때</b> → 편집기에서 파일 교체 → Ctrl+S → <b>배포 → 배포 관리 → 연필 → 새 버전 → 배포</b>. 주소는 그대로입니다. 붙여 넣기 전에 <b>지금 열린 파일 이름</b>을 한 번 확인하세요.</li>
+  </ol>
+</div>
+</section>
+
+<footer>
+  AI 마에스트로 자율스터디 6주차 제출물 · 부산대학교 연구진흥과 · 2026. 10.<br>
+  ※ 화면의 예시는 가상 입력(○○○)입니다. 적은 내용은 저장·전송되지 않으며, 규칙은 공개된 사업 집행지침을 따릅니다. 판정·승인은 담당자와 결재선이 합니다.
+</footer>
+
+</div>
+</body>
+</html>
