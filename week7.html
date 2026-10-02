@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>7주차 — 나만의 에이전트 다듬기</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+  :root {
+    --navy: #003A70; --gold: #B98E2F; --lightgold: #FDF6E7;
+    --ink: #0B0B0B; --gray: #52514E; --sky: #EEF3FB; --line: #D8E0EE; --bg: #F6F7F9;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: "Pretendard", "Malgun Gothic", "맑은 고딕", sans-serif; color: var(--ink); background: var(--bg); line-height: 1.7; padding: 24px 16px 60px; }
+  .wrap { max-width: 860px; margin: 0 auto; }
+  a.back { color: var(--gray); font-size: .85rem; text-decoration: none; }
+  a.back:hover { color: var(--navy); }
+  header { background: var(--navy); color: #fff; border-radius: 14px; padding: 34px 38px 30px; margin: 10px 0 22px; border-bottom: 5px solid var(--gold); }
+  header .tag { display: inline-block; border: 1px solid var(--gold); color: #FFD88A; border-radius: 20px; font-size: .8rem; padding: 3px 14px; margin-bottom: 14px; }
+  header h1 { font-size: 1.65rem; line-height: 1.35; font-weight: 800; }
+  header .sub { margin-top: 12px; font-size: .93rem; color: #CFD8E4; }
+  .lead { background: var(--lightgold); border: 1px solid #ECD9AB; border-left: 5px solid var(--gold); border-radius: 10px; padding: 18px 24px; margin-bottom: 24px; font-size: 1rem; }
+  .lead b { color: var(--navy); }
+  section { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 28px 32px; margin-bottom: 20px; }
+  h2 { font-size: 1.15rem; color: var(--navy); font-weight: 800; padding-bottom: 10px; border-bottom: 2px solid var(--sky); margin-bottom: 18px; }
+  h2 .no { display: inline-block; background: var(--navy); color: #FFD88A; font-size: .85rem; border-radius: 6px; padding: 1px 10px; margin-right: 9px; vertical-align: 2px; }
+  h3 { font-size: 1rem; color: var(--navy); margin: 22px 0 8px; }
+  p { margin-bottom: 12px; }
+  ul { padding-left: 20px; margin-bottom: 10px; }
+  li { margin-bottom: 8px; }
+  .muted { color: var(--gray); font-size: .88rem; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-top: 6px; }
+  .card { border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; background: #fff; }
+  .card.gold { background: var(--lightgold); border-color: #ECD9AB; }
+  .card.sky { background: var(--sky); }
+  .card .step { display: inline-block; background: var(--navy); color: #FFD88A; font-weight: 800; font-size: .8rem; border-radius: 6px; padding: 2px 10px; margin-bottom: 8px; }
+  .card.gold .step { background: var(--gold); color: #fff; }
+  .card h3 { margin: 0 0 8px; }
+  .card p, .card li { font-size: .9rem; color: var(--gray); }
+  .card p { margin-bottom: 0; }
+  .card ul { margin: 0; padding-left: 18px; }
+  .card b { color: var(--ink); }
+  .scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: .9rem; margin: 8px 0; }
+  th, td { border: 1px solid var(--line); padding: 8px 12px; text-align: left; vertical-align: top; }
+  th { background: var(--navy); color: #fff; font-weight: 700; white-space: nowrap; }
+  td.dim { color: var(--gray); background: var(--bg); }
+  td.hl { background: var(--sky); }
+  td.k { font-weight: 700; color: var(--navy); white-space: nowrap; }
+  figure { margin: 14px 0 18px; }
+  figure img { width: 100%; border: 1px solid var(--line); border-radius: 10px; background: #fff; }
+  figure.phone img { max-width: 320px; display: block; }
+  figcaption { font-size: .85rem; color: var(--gray); margin-top: 6px; }
+  .figs { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; align-items: start; }
+  @media (max-width: 640px) { .figs { grid-template-columns: 1fr; } }
+  pre.code { background: #0B1F3A; color: #E8EEF7; border-radius: 10px; padding: 16px 18px; font-size: .82rem; line-height: 1.55; overflow-x: auto; white-space: pre-wrap; margin: 10px 0 14px; }
+  pre.code .c { color: #8FB3E0; }
+  .flow { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 6px 0 14px; }
+  .flow span { background: var(--sky); color: var(--navy); border-radius: 8px; padding: 6px 14px; font-weight: 700; font-size: .92rem; }
+  .flow .sep { background: none; color: var(--gold); padding: 0; }
+  .flow .last { background: var(--lightgold); color: var(--gold); }
+  .todo-box { background: var(--navy); color: #fff; border-radius: 12px; padding: 20px 26px; margin: 0 0 24px; border-left: 6px solid var(--gold); }
+  .todo-box h3 { color: #FFD88A; margin: 0 0 12px; font-size: 1.05rem; }
+  .todo-box ol { margin: 0; padding-left: 0; list-style: none; }
+  .todo-box li { margin-bottom: 10px; font-size: .97rem; line-height: 1.6; }
+  .todo-box li:last-child { margin-bottom: 0; }
+  .todo-box b { color: #FFD88A; }
+  .todo-box .muted { color: #CFD8E4; }
+  .todo-box pre { background: #fff; color: #0B0B0B; margin: 10px 0 8px; font-size: .8rem; white-space: pre-wrap; border-radius: 8px; padding: 12px 14px; }
+  footer { text-align: center; color: var(--gray); font-size: .83rem; margin-top: 26px; }
+  /* 초안 전용: 채울 칸 표시 — 공개 전에 지움 */
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<a class="back" href="index.html">← 자율스터디 제출물 목록</a>
+
+<header>
+  <span class="tag">AI 마에스트로 자율스터디 · 7주차 결과물 (마감 10. 11.)</span>
+  <h1>7주차 — 나만의 에이전트 다듬기<br>— 회의비 한 가지를, 규정 답에서 서류까지 확실하게</h1>
+  <div class="sub">부산대학교 연구진흥과 · 2026. 10. 3.</div>
+</header>
+
+<div class="lead">
+  <b>한 줄 요약:</b> 6주차에 배포한 「연구진흥과 창구」에서 <b>회의비 하나</b>만 골라 끝까지 다듬었습니다.
+  ① 지침 현행본과 다시 맞대 <b>옛 한도(1인 3만 원, 2021 제정본)를 지금 지침(1인 5만 원, 2026. 3. 개정)으로</b> 바로잡고 어느 재원 기준인지 밝혔고,
+  ② 따로 있던 회의비 서류 화면을 <b>창구 안으로 합쳐</b> 「질문 → 규정 답 → 계획 점검 → 기안 공문 본문 → 회의 뒤 회의록 문구」가 한 화면에서 끝나게 했습니다.
+  주소는 6주차와 같고(웹 앱 새 버전), 적은 내용은 여전히 화면 밖으로 나가지 않습니다.
+  <br>배포 주소: <a href="https://script.google.com/macros/s/AKfycbzX3jH00kiiS46d3krmwfoBe7PT1jClHbHcydlXWcpvWUYZtfpcX1FmyUCrSatm744ZOQ/exec" target="_blank" rel="noopener">https://script.google.com/macros/s/AKfycbzX3jH00kiiS46d3krmwfoBe7PT1jClHbHcydlXWcpvWUYZtfpcX1FmyUCrSatm744ZOQ/exec</a>
+</div>
+
+<div class="todo-box">
+  <h3>그래서 여러분은 이것만 하면 됩니다 <span class="muted" style="font-weight:400;font-size:.85rem;">— 전체가 아니라 한 가지만</span></h3>
+  <ol>
+    <li><b>① 내 에이전트에서 가장 자주 쓰는 기능 하나만 고릅니다</b> → 예: "회의비 한도 답하기", "공고 요약 한 통", "주간 실적 한 줄 정리". 그 기능이 기대는 <b>근거 자료(지침·규정 파일)</b>도 한 개 정해 둡니다.</li>
+    <li><b>② 클로드 앱 상단 [Code] 탭</b> → 에이전트가 있는 폴더를 열고 <b>아래 문장을 그대로 붙여 넣으세요.</b> 괄호 안만 여러분 것으로 바꾸면 됩니다.
+      <pre>내 에이전트에서 「(기능 이름)」 한 가지만 확실하게 다듬고 싶어.
+1) 이 기능이 기대는 숫자·규칙을 (근거 자료 파일 이름)의 현행본과 한 줄씩 대조해서, 다른 곳을 표로 먼저 보여 줘. 고치기 전에 나에게 확인받아.
+2) 고치기 전에 검사를 먼저 써 줘: 한도 바로 위·아래 값, 주말·공휴일, 아침 9시 전 날짜, 빈 칸, 개인정보가 섞인 입력.
+3) 예시 버튼은 오늘이 며칠이든 늘 통과하는 값으로 채우게 해 줘.
+4) 검사가 전부 통과하면, 처음 쓰는 사람처럼 처음부터 끝까지 한 번 눌러 보고 막히는 곳을 알려 줘.
+적은 내용은 서버로 보내지 말고, 고친 이유는 README에 한 줄씩 남겨 줘.</pre></li>
+    <li><b>③ 같은 주소로 다시 배포</b> → 배포 관리 → 연필 → 새 버전 → 배포. <b>휴대폰으로 그 기능 하나를 처음부터 끝까지</b> 한 번 눌러 봅니다.</li>
+  </ol>
+</div>
+
+<section>
+<h2><span class="no">1</span>왜 회의비 하나인가</h2>
+<p>6주차 창구의 예시 질문 다섯 가운데 셋이 회의비·참석자확인서·법인카드였습니다. 회의비는 기안 공문 → 클린카드 결제 → 증빙 네 가지(공문·카드매출전표·회의록·참석자확인서) → 원인행위까지 <b>손이 가장 많이 가는 일</b>이라, 하나를 고른다면 이것이었습니다.
+미션 지침도 "전체를 완성하려 하지 말고 잘 동작하는 한 부분이라도 확실하게"였습니다. 그래서 새 기능을 늘리지 않고 <b>회의비 한 가지가 처음부터 끝까지 맞게 되는지</b>만 봤습니다.</p>
+<div class="cards">
+  <div class="card sky"><span class="step">6주차까지</span><h3>입구 하나 · 서류 화면은 따로</h3><p>창구는 회의비 한도를 답하고, 서류를 만드는 화면은 <b>별도 판</b>(첫 판)에 있었습니다. 그 판의 한도는 <b>2021 제정본 1인 3만 원</b>이었습니다.</p></div>
+  <div class="card gold"><span class="step">7주차</span><h3>한 화면에서 끝까지</h3><p>답 카드 아래 <b>「이 회의, 서류까지 만들어 보기」</b> → 계획 점검 → 공문 본문·원인행위 입력표 → 회의 뒤 영수증으로 회의록·지출증빙 문구.</p></div>
+</div>
+</section>
+
+<section>
+<h2><span class="no">2</span>다듬은 것 ① — 규정과 다시 맞대 보기</h2>
+<p>지침 PDF(부산대학교 4단계 BK21 대학원혁신지원사업 사업비 편성 및 집행지침, <b>2026. 3. 개정</b>)를 쪽 단위로 다시 읽고, 창구가 말하는 것을 한 줄씩 맞대 봤습니다.</p>
+<div class="scroll"><table>
+  <tr><th>항목</th><th>고치기 전</th><th>고친 뒤</th><th>근거</th></tr>
+  <tr><td class="k">1인 한도</td><td>1인 30,000원 <span class="muted">(2021 제정본 값이 남아 있었음)</span></td><td><b>50,000원 이내</b>(다과·식대 포함)</td><td>§9 「지급기준: 5만원 이내/1인」(17쪽)</td></tr>
+  <tr><td class="k">어느 재원 기준인지</td><td>「BK21(대학회계) 기준」</td><td>「<b>BK21 대학원혁신지원비</b>」 · 국립대육성사업·연구개발과제는 1인 30,000원 · 교육연구단 사업비는 산학협력단 기준</td><td>재원마다 지침이 다름</td></tr>
+  <tr><td class="k">참석자확인서</td><td>"운용상 금액 무관"</td><td>"<b>결제 금액과 관계없이</b>" 필수</td><td>§9 원문</td></tr>
+  <tr><td class="k">근거 표시</td><td>§9 · 예산 집행 체크리스트 §7</td><td>§9 · Ⅳ-6(클린카드 제한업종)</td><td>체크리스트는 2026. 3. 판에 없음(2021 판에만)</td></tr>
+  <tr><td class="k">휴가·출장자, 같은 시간대</td><td>"안 됩니다"(조문처럼)</td><td>"<b>담당자가 확인</b>"</td><td>지금 판 §9 조문에는 없는 운영 확인 사항</td></tr>
+</table></div>
+<p class="muted">9/30에 지침 사본과 맞대 3만 원을 5만 원으로 고친 뒤, 10/1에 교육연구단 게시판에 공개된 같은 판과 옛 판(2022. 3.)까지 다시 대조해 확인했습니다. 서식(밑줄 등)만 보고 "이번 개정에서 바뀐 줄"이라고 짐작했던 것은 옛 판에도 같은 밑줄이 있어 틀린 짐작이었습니다 — 개정 여부는 옛 판과 맞대 본 것만 말하기로 했습니다.</p>
+</section>
+
+<section>
+<h2><span class="no">3</span>다듬은 것 ② — 회의비 서류를 창구 안으로</h2>
+<div class="flow">
+  <span>「회의비 1인 한도가 얼마예요?」</span><span class="sep">▶</span>
+  <span>답 카드(근거 조항)</span><span class="sep">▶</span>
+  <span>서류까지 만들어 보기</span><span class="sep">▶</span>
+  <span>① 회의 계획</span><span class="sep">▶</span>
+  <span>② 점검 · 공문 본문 · 원인행위 입력표</span><span class="sep">▶</span>
+  <span class="last">③ 회의 뒤 영수증 → 회의록 · 지출증빙 문구</span>
+</div>
+<div class="scroll"><table>
+  <tr><th>점검(회의 전)</th><th>어떻게 알려 주나</th><th>근거</th></tr>
+  <tr><td>1인 단가</td><td>50,000원을 넘으면 빨강</td><td>§9</td></tr>
+  <tr><td>날짜</td><td>토·일·공휴일(대체공휴일 포함)이면 빨강 · 사유 문서 칸을 켜면 노랑</td><td>§9 주의사항</td></tr>
+  <tr><td>시각</td><td>22시 이후 시작이면 빨강 · 20시 이후면 "결제가 22시를 넘지 않게" 노랑</td><td>§9 주의사항</td></tr>
+  <tr><td>장소</td><td>근무지와 먼 지역 이름 · 주류 위주 업종으로 보이는 이름이면 노랑(이름만 보고 띄우는 알림)</td><td>§9 · Ⅳ-6</td></tr>
+  <tr><td>명단과 인원</td><td>수가 다르면 노랑 · 외부인은 참석자확인서 안내</td><td>증빙</td></tr>
+  <tr><td>늘 띄우는 것</td><td>참석자확인서는 금액과 관계없이 · 휴가·출장자·같은 시간대는 담당자 확인 · 회의 뒤 후식 금지</td><td>§9</td></tr>
+</table></div>
+<p>회의가 끝나면 영수증 총액·실제 인원·결제 일시·가맹점을 넣어 <b>사후 점검</b>(예산 초과, 1인당 한도, 결제일 = 개최일, 22시 이후)을 하고, <b>원인행위 입력표(확정)·서식6 회의록·서식1 지출 증빙 영수증</b> 문구를 만들어 「복사」로 가져갑니다.
+판정·결재는 하지 않습니다 — 점검은 규칙표에 따른 안내이고, 판단과 승인은 담당자와 결재선이 합니다.</p>
+</section>
+
+<section>
+<h2><span class="no">4</span>다듬은 것 ③ — 처음부터 끝까지 눌러 보다 걸린 것</h2>
+<div class="scroll"><table>
+  <tr><th>걸린 것</th><th>왜</th><th>고친 뒤</th></tr>
+  <tr><td>「예시 채우기」를 10/8(목)에 누르면 빨강 「공휴일이에요」</td><td>예시 날짜를 '내일'로 넣었는데 10/9는 한글날</td><td>예시 날짜 = <b>다음 근무일</b>(주말·공휴일 건너뜀) — 10/8이면 10/12(월)</td></tr>
+  <tr><td>아침 9시 전에는 예시 날짜가 하루 밀림</td><td>오늘 날짜를 세계 표준시(UTC)로 셈</td><td><b>한국 시간</b>으로 셈</td></tr>
+  <tr><td>빈 칸이 있어도 공문 본문이 나옴</td><td>막는 조건이 늘 거짓이었음(문구가 바뀐 뒤 조건을 안 고침)</td><td>제목·날짜·인원·단가가 비면 <b>점검만</b> 보여 주고 서류는 내지 않음</td></tr>
+  <tr><td>예산과목에 부서 세부사업 이름</td><td>누구나 여는 화면에 내부 세부사업 이름이 보임</td><td>「○○」 예시와 <b>직접 입력</b>으로</td></tr>
+</table></div>
+</section>
+
+<section>
+<h2><span class="no">5</span>검사로 묶기 — 고치기 전에 검사부터</h2>
+<p>위의 것을 하나씩 <b>검사를 먼저 써서(빨강 확인) → 고친 뒤(초록)</b> 올렸습니다. 운영판 34개 · 시연판 85개, 전부 통과해야 배포합니다.</p>
+<pre class="code"><span class="c">// 이번 주에 새로 쓴 검사(일부)</span>
+✓ 1인 50,001원 → 빨강, 50,000원 → 통과(경계값), 옛 한도 30,000원을 넘는 40,000원도 통과
+✓ 한도 줄에 「BK21 대학원혁신지원비」 · 교육연구단 사업비는 기준이 따로라는 안내
+✓ 근거는 지금 판 지침에 실제로 있는 것만(「체크리스트」를 근거로 대지 않음)
+✓ 다음 근무일: 10/8 → 10/12(한글날·주말 건너뜀) · 10/2 → 10/6(개천절·대체공휴일 건너뜀)
+✓ 오늘 날짜는 PC 시간대와 상관없이 한국 시간(아침 8시 30분 → 그날)
+✓ 예시를 채우면 그 자체로는 빨간 항목이 없다
+✓ 서류를 만들면 plan, 마무리하면 after 를 한 번씩만 센다 — 적은 내용은 서버로 안 감
+✓ 공개 화면에 부서 세부사업 이름이 없다</pre>
+<p class="muted">서버(Code.gs)가 세는 것은 질문(ask)·출구(exit)에 서류 만들기(plan)·마무리(after) 둘을 더한 <b>고정 낱말 넷</b>뿐입니다. 화면 코드와 검사는 Claude Code가 작성했고, 코드는 직접 쓰지 않았습니다.</p>
+</section>
+
+<section>
+<h2><span class="no">6</span>결과</h2>
+<div class="scroll"><table>
+  <tr><th>항목</th><th>내용</th></tr>
+  <tr><td class="k">배포</td><td>6주차와 같은 주소, @3(10/3) <span class="muted">(Apps Script 웹 앱 새 버전 · 로그인 없이 열림)</span></td></tr>
+  <tr><td class="k">열어 본 곳</td><td>PC 크롬 · 휴대폰 · 카톡 안 브라우저 — 로그인 없이 열리고 회의비 서류까지 됨(10/3 · 휴대폰·카톡은 화면 폭과 브라우저 흉내로 확인)</td></tr>
+  <tr><td class="k">사용 횟수</td><td>16회(질문·출구·서류 만들기·마무리를 센 합계) <span class="muted">(익명 · 만든 사람의 시험 포함)</span></td></tr>
+</table></div>
+<figure><img src="img/week7-answer.png" alt="회의비 한도를 물으면 BK21 대학원혁신지원비 1인 5만 원과 근거가 나오고, 카드 아래에 서류까지 만들어 보기 버튼이 있는 화면"><figcaption>회의비 한도를 물으면 「BK21 대학원혁신지원비 1인 50,000원 이내 — 2026. 3. 개정 지침」과 근거가 나오고, 카드 아래 「이 회의, 서류까지 만들어 보기」.</figcaption></figure>
+<figure><img src="img/week7-docs.png" alt="회의비 서류 화면: 왼쪽에 회의 계획, 오른쪽에 점검 결과와 기안 공문 본문"><figcaption>「예시 채우기 → 서류 만들기」. 왼쪽 회의 계획, 오른쪽 지침 점검과 기안 공문 본문·원인행위 입력표(예시 이름은 ○○○).</figcaption></figure>
+<div class="figs">
+  <figure><img src="img/week7-after.png" alt="회의 뒤 영수증 값을 넣으면 사후 점검과 회의록·지출 증빙 문구가 나오는 화면"><figcaption>회의 뒤: 영수증 값 → 사후 점검과 회의록·지출 증빙 문구.</figcaption></figure>
+  <figure class="phone"><img src="img/week7-phone.png" alt="휴대폰 화면에서 본 회의비 서류 화면"><figcaption>휴대폰(390px).</figcaption></figure>
+</div>
+</section>
+
+<section>
+<h2><span class="no">7</span>정직하게, 지금 단계 — 된 것 / 안 된 것 / 다음</h2>
+<div class="scroll"><table>
+  <tr><th>구분</th><th>내용</th></tr>
+  <tr><td class="hl"><b>된 것</b></td><td>회의비 한 가지: 현행 지침과 대조한 답 → 계획 점검 → 기안 공문 본문·원인행위 입력표 → 회의 뒤 사후 점검·회의록·지출 증빙 문구까지 한 화면. 날짜 계산 두 가지와 빈 칸 처리 고침. 새 검사를 먼저 쓰고 전부 통과.</td></tr>
+  <tr><td class="dim"><b>아직 안 된 것</b></td><td><b>다른 재원</b>(국립대육성사업·교육연구단 사업비·연구개발과제·교비)의 서류 점검 — 지금은 답 카드에서 "기준이 다르다"고 알려 주는 데까지. <b>결재·KORUS 입력·잔액 확인·영수증 읽기</b>는 하지 않습니다. 공휴일표는 담당자가 해마다 갱신해야 합니다.</td></tr>
+  <tr><td><b>바꾸지 않을 원칙</b></td><td>적은 내용은 서버로 보내지 않고 저장하지 않는다. 숫자는 지침 원문과 맞대 본 것만, 근거와 판을 함께 적는다. 판정·승인은 사람.</td></tr>
+</table></div>
+<p><b>다음 계획:</b> ① 8주차 — 이 창구를 다른 부서·대학 행정에 도입할 수 있는지 검토하고 확장 아이디어 정리(재원별 예외표가 첫 후보) ② 써 본 분 의견으로 예시·문구 다듬기 ③ 지침이 개정되면 규칙표 한 곳과 검사를 같이 고치기.</p>
+</section>
+
+<footer>
+  AI 마에스트로 자율스터디 7주차 제출물 · 부산대학교 연구진흥과 · 2026. 10.<br>
+  ※ 화면의 예시는 가상 입력(○○○)입니다. 적은 내용은 저장·전송되지 않으며, 규칙은 공개된 사업 집행지침(2026. 3. 개정)을 따릅니다. 판정·승인은 담당자와 결재선이 합니다.
+</footer>
+
+</div>
+
+</body>
+</html>
